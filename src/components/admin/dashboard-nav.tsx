@@ -2,6 +2,7 @@ const links = [
   { href: "#emails", label: "Emails" },
   { href: "#mixes", label: "Mixes" },
   { href: "#videos", label: "Videos" },
+  { href: "#photos", label: "Photos" },
   { href: "#events", label: "Events" },
 ];
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EventCard } from "@/components/events/event-card";
 import { EventsEmpty } from "@/components/events/events-empty";
+import { groupEventsByWeek } from "@/lib/events/group-events-by-week";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabasePublicConfig } from "@/lib/supabase/env";
 
@@ -27,9 +28,10 @@ export default async function EventsPage() {
 
   const { data: rows, error } = await supabase
     .from("events")
-    .select("id, title, event_date, location, description, rsvp_link, created_at")
+    .select("id, title, event_date, location, description, rsvp_link, flyer_image_url, created_at")
     .gte("event_date", nowIso)
-    .order("event_date", { ascending: true });
+    .order("event_date", { ascending: true })
+    .limit(5);
 
   if (error) {
     return (
@@ -48,7 +50,7 @@ export default async function EventsPage() {
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Events</h1>
       <p className="mt-3 text-zinc-400">
-        Upcoming nights and listings at The Listening Room.
+        Weekly showcases and special nights at The Listening Room—grouped by calendar week.
       </p>
 
       {events.length === 0 ? (
@@ -56,13 +58,25 @@ export default async function EventsPage() {
           <EventsEmpty />
         </div>
       ) : (
-        <ul className="mt-10 space-y-6">
-          {events.map((event) => (
-            <li key={event.id}>
-              <EventCard event={event} />
-            </li>
+        <div className="mt-10 space-y-12">
+          {groupEventsByWeek(events).map((week) => (
+            <section key={week.weekKey} aria-labelledby={`week-${week.weekKey}`}>
+              <h2
+                id={`week-${week.weekKey}`}
+                className="border-b border-accent-dim/25 pb-2 text-sm font-semibold uppercase tracking-wider text-zinc-400"
+              >
+                Week of {week.weekLabel}
+              </h2>
+              <ul className="mt-6 space-y-6">
+                {week.events.map((event) => (
+                  <li key={event.id}>
+                    <EventCard event={event} />
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

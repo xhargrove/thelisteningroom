@@ -1,5 +1,5 @@
 /**
- * Maximum size for admin uploads to Storage (`video-uploads` bucket).
+ * Maximum size for admin uploads to Storage (`NEXT_PUBLIC_SUPABASE_VIDEO_UPLOAD_BUCKET`).
  *
  * Must stay in sync with `supabase/migrations/*` bucket `file_size_limit`.
  * Supabase also enforces a **plan-level** max upload size (often small on Free,

@@ -1,12 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAdminSupabase } from "@/lib/admin/require-admin";
+import {
+  assertAdminAccess,
+  requireAdminServiceRoleClient,
+} from "@/lib/admin/require-admin";
+import { getVideoUploadBucketId } from "@/lib/storage/video-upload-bucket";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert } from "@/types/database";
 import { VIDEO_UPLOAD_MAX_BYTES, videoUploadMaxLabel } from "@/lib/videos/upload-limits";
-
-const BUCKET = "video-uploads";
 
 function sanitizeFileName(name: string): string {
   const base = name.split(/[/\\]/).pop() ?? "video";
@@ -24,10 +26,19 @@ function parseBoolean(value: FormDataEntryValue | null): boolean {
   return value === "true" || value === "on" || value === "1";
 }
 
+/** Browsers sometimes send empty or generic MIME; accept common video extensions. */
+function isClientVideoCandidate(mime: string, filename: string): boolean {
+  if (mime.startsWith("video/")) return true;
+  if (mime === "" || mime === "application/octet-stream") {
+    return /\.(mp4|webm|mov|m4v|qt|avi|mkv|mpeg|mpg)$/i.test(filename);
+  }
+  return false;
+}
+
 /** Step 1 (admin): get a signed upload target — client uploads the file directly to Storage. */
 export async function requestVideoUploadSlot(formData: FormData) {
   try {
-    await requireAdminSupabase();
+    await assertAdminAccess();
 
     const nameRaw = formData.get("filename");
     const sizeRaw = formData.get("size");
@@ -46,14 +57,15 @@ export async function requestVideoUploadSlot(formData: FormData) {
         message: `File too large (max ${videoUploadMaxLabel()}).`,
       };
     }
-    if (!mime.startsWith("video/")) {
-      return { ok: false as const, message: "Please choose a video file." };
+    if (!isClientVideoCandidate(mime, filename)) {
+      return { ok: false as const, message: "Please choose a video file (MP4, WebM, MOV, etc.)." };
     }
 
     const path = `uploads/${crypto.randomUUID()}/${sanitizeFileName(filename)}`;
 
+    const bucket = getVideoUploadBucketId();
     const service = createSupabaseServiceRoleClient();
-    const { data, error } = await service.storage.from(BUCKET).createSignedUploadUrl(path);
+    const { data, error } = await service.storage.from(bucket).createSignedUploadUrl(path);
 
     if (error || !data) {
       return {
@@ -66,6 +78,7 @@ export async function requestVideoUploadSlot(formData: FormData) {
 
     return {
       ok: true as const,
+      bucket,
       path: data.path,
       token: data.token,
       signedUrl: data.signedUrl,
@@ -81,7 +94,7 @@ export async function requestVideoUploadSlot(formData: FormData) {
 /** Step 2 (admin): save a `videos` row pointing at the uploaded public URL. */
 export async function registerUploadedVideo(formData: FormData) {
   try {
-    const supabase = await requireAdminSupabase();
+    const supabase = await requireAdminServiceRoleClient();
 
     const pathRaw = formData.get("storage_path");
     const titleRaw = formData.get("title");
@@ -100,10 +113,11 @@ export async function registerUploadedVideo(formData: FormData) {
       return { ok: false as const, message: "Title is required." };
     }
 
+    const bucket = getVideoUploadBucketId();
     const service = createSupabaseServiceRoleClient();
     const {
       data: { publicUrl },
-    } = service.storage.from(BUCKET).getPublicUrl(storagePath);
+    } = service.storage.from(bucket).getPublicUrl(storagePath);
 
     const row: TableInsert<"videos"> = {
       title,

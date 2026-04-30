@@ -1,5 +1,5 @@
 import { buildCsv, csvResponse } from "@/lib/admin/csv";
-import { requireAdminSupabase } from "@/lib/admin/require-admin";
+import { requireAdminServiceRoleClient } from "@/lib/admin/require-admin";
 import type { TableRow } from "@/types/database";
 
 type EmailRow = TableRow<"emails">;
@@ -14,7 +14,7 @@ const EMAIL_COLUMNS: readonly (keyof EmailRow)[] = [
 
 export async function GET() {
   try {
-    const supabase = await requireAdminSupabase();
+    const supabase = await requireAdminServiceRoleClient();
     const { data, error } = await supabase
       .from("emails")
       .select("*")

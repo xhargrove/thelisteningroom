@@ -7,6 +7,7 @@ import { DashboardTables } from "@/components/admin/dashboard-tables";
 import { isAdminUser } from "@/lib/auth/is-admin";
 import { loadAdminDashboard } from "@/lib/admin/load-dashboard";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -25,7 +26,8 @@ export default async function AdminPage() {
     redirect("/admin/login");
   }
 
-  const dashboard = await loadAdminDashboard(supabase);
+  const adminDb = createSupabaseServiceRoleClient();
+  const dashboard = await loadAdminDashboard(adminDb);
 
   const muxUploadEnabled = Boolean(
     process.env.MUX_TOKEN_ID?.trim() && process.env.MUX_TOKEN_SECRET?.trim(),

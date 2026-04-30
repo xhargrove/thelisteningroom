@@ -88,6 +88,7 @@ export interface Database {
           location: string;
           description: string | null;
           rsvp_link: string | null;
+          flyer_image_url: string | null;
           created_at: string;
         };
         Insert: {
@@ -97,6 +98,7 @@ export interface Database {
           location: string;
           description?: string | null;
           rsvp_link?: string | null;
+          flyer_image_url?: string | null;
           created_at?: string;
         };
         Update: {
@@ -106,6 +108,37 @@ export interface Database {
           location?: string;
           description?: string | null;
           rsvp_link?: string | null;
+          flyer_image_url?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      photos: {
+        Row: {
+          id: string;
+          title: string;
+          caption: string | null;
+          link_url: string | null;
+          media_urls: Json;
+          published: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          caption?: string | null;
+          link_url?: string | null;
+          media_urls: Json;
+          published?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          caption?: string | null;
+          link_url?: string | null;
+          media_urls?: Json;
+          published?: boolean;
           created_at?: string;
         };
         Relationships: [];

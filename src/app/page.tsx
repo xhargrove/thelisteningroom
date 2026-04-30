@@ -39,6 +39,7 @@ export default async function HomePage() {
         location: string;
         description: string | null;
         rsvp_link: string | null;
+        flyer_image_url: string | null;
       }
     | null = null;
 
@@ -61,7 +62,7 @@ export default async function HomePage() {
         .limit(6),
       supabase
         .from("events")
-        .select("id, title, event_date, location, description, rsvp_link")
+        .select("id, title, event_date, location, description, rsvp_link, flyer_image_url")
         .gte("event_date", nowIso)
         .order("event_date", { ascending: true })
         .limit(1),
@@ -241,6 +242,17 @@ export default async function HomePage() {
             </p>
           ) : upcomingEvent ? (
             <article className="mx-auto mt-8 max-w-2xl rounded-xl border border-accent-dim/25 bg-night-card/80 p-6 sm:p-7">
+              {upcomingEvent.flyer_image_url?.trim() ? (
+                <div className="mb-6 overflow-hidden rounded-lg border border-accent-dim/25 bg-black/30">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={upcomingEvent.flyer_image_url.trim()}
+                    alt={`${upcomingEvent.title} flyer`}
+                    className="mx-auto aspect-[9/16] h-auto w-full max-w-sm object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ) : null}
               <time className="text-xs font-semibold uppercase tracking-wider text-accent">
                 {formatEventDate(upcomingEvent.event_date)}
               </time>

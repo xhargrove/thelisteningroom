@@ -1,7 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAdminSupabase } from "@/lib/admin/require-admin";
+import {
+  assertAdminAccess,
+  requireAdminServiceRoleClient,
+} from "@/lib/admin/require-admin";
 import { hasMuxCredentials, muxGet, muxPost } from "@/lib/mux/mux-api";
 import type { TableInsert } from "@/types/database";
 
@@ -11,7 +14,7 @@ export async function startMuxDirectUpload(): Promise<
   | { ok: false; message: string }
 > {
   try {
-    await requireAdminSupabase();
+    await assertAdminAccess();
     if (!hasMuxCredentials()) {
       return { ok: false, message: "Mux is not configured on the server." };
     }
@@ -42,7 +45,7 @@ export async function readMuxUpload(uploadId: string): Promise<
   | { ok: false; message: string }
 > {
   try {
-    await requireAdminSupabase();
+    await assertAdminAccess();
     if (!hasMuxCredentials()) {
       return { ok: false, message: "Mux is not configured." };
     }
@@ -70,7 +73,7 @@ export async function readMuxAsset(assetId: string): Promise<
   | { ok: false; message: string }
 > {
   try {
-    await requireAdminSupabase();
+    await assertAdminAccess();
     if (!hasMuxCredentials()) {
       return { ok: false, message: "Mux is not configured." };
     }
@@ -107,7 +110,7 @@ export async function saveMuxVideoEntry(payload: {
   published: boolean;
 }): Promise<{ ok: true } | { ok: false; message: string }> {
   try {
-    const supabase = await requireAdminSupabase();
+    const supabase = await requireAdminServiceRoleClient();
 
     const playbackId = payload.playbackId.trim();
     const title = payload.title.trim();

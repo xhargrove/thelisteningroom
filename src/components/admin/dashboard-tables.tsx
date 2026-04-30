@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
 import { AddEventForm } from "@/components/admin/add-event-form";
+import { AddPhotoForm } from "@/components/admin/add-photo-form";
 import { AddVideoForm } from "@/components/admin/add-video-form";
 import { MuxUploadForm } from "@/components/admin/mux-upload-form";
 import { VideoDeliveryGuidance } from "@/components/admin/video-delivery-guidance";
 import { DeleteMixButton } from "@/components/admin/delete-mix-button";
 import { EventEditorRow } from "@/components/admin/event-editor-row";
 import { MixStatusSelect } from "@/components/admin/mix-status-select";
+import { PhotoEditorRow } from "@/components/admin/photo-editor-row";
 import { VideoEditorRow } from "@/components/admin/video-editor-row";
 import { SectionCard } from "@/components/admin/section-card";
 import { formatAdminDateTime } from "@/lib/admin/format-admin-date";
@@ -35,7 +37,7 @@ export function DashboardTables({
   data: AdminDashboardPayload;
   muxUploadEnabled?: boolean;
 }) {
-  const { emails, mixes, videos, events } = data;
+  const { emails, mixes, videos, photos, events } = data;
 
   return (
     <div className="mt-10 flex flex-col gap-10">
@@ -166,6 +168,35 @@ export function DashboardTables({
       </SectionCard>
 
       <SectionCard
+        id="photos"
+        title="Photo manager"
+        description="Post single images or multi-image carousels, with optional outbound links."
+      >
+        <div className="space-y-5">
+          <AddPhotoForm />
+          <TableShell empty={photos.length === 0}>
+            <table className="min-w-[1220px] w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+                  <th className="pb-3 pr-3 font-medium">Title</th>
+                  <th className="pb-3 pr-3 font-medium">Caption</th>
+                  <th className="pb-3 pr-3 font-medium">Link</th>
+                  <th className="pb-3 pr-3 font-medium">Photo URLs</th>
+                  <th className="pb-3 pr-3 font-medium">Published</th>
+                  <th className="pb-3 font-medium text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-accent-dim/15">
+                {photos.map((row) => (
+                  <PhotoEditorRow key={row.id} post={row} />
+                ))}
+              </tbody>
+            </table>
+          </TableShell>
+        </div>
+      </SectionCard>
+
+      <SectionCard
         id="events"
         title="Event manager"
         description="Add, edit, and remove events. Public /events updates from the database."
@@ -173,7 +204,7 @@ export function DashboardTables({
         <div className="space-y-5">
           <AddEventForm />
           <TableShell empty={events.length === 0}>
-            <table className="min-w-[1160px] w-full text-left text-sm">
+            <table className="min-w-[1360px] w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
                   <th className="pb-3 pr-3 font-medium">When</th>
@@ -181,6 +212,7 @@ export function DashboardTables({
                   <th className="pb-3 pr-3 font-medium">Location</th>
                   <th className="pb-3 pr-3 font-medium">Description</th>
                   <th className="pb-3 pr-3 font-medium">RSVP link</th>
+                  <th className="pb-3 pr-3 font-medium">Flyer (9:16)</th>
                   <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>

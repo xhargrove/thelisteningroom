@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { requestVideoUploadSlot, registerUploadedVideo } from "@/app/actions/video-upload";
-import { getSupabaseProjectRef } from "@/lib/supabase/env";
 import { VIDEO_UPLOAD_MAX_BYTES, videoUploadMaxLabel } from "@/lib/videos/upload-limits";
-import { uploadVideoTusSigned } from "@/lib/videos/tus-upload-signed";
+import { uploadVideoToSignedSlot } from "@/lib/videos/storage-upload";
 
 const ACCEPT = "video/mp4,video/webm,video/quicktime,video/*";
 
@@ -60,21 +59,10 @@ export function VideoUploadSection() {
       setPhase("uploading");
       setUploadPct(0);
 
-      let projectRef: string;
       try {
-        projectRef = getSupabaseProjectRef();
-      } catch (refErr) {
-        setPhase("idle");
-        setUploadPct(null);
-        setIsError(true);
-        setMessage(refErr instanceof Error ? refErr.message : "Missing Supabase URL.");
-        return;
-      }
-
-      try {
-        await uploadVideoTusSigned({
-          projectRef,
-          bucket: "video-uploads",
+        await uploadVideoToSignedSlot({
+          signedUploadUrl: prep.signedUrl,
+          bucket: prep.bucket,
           path: prep.path,
           token: prep.token,
           file,

@@ -4,6 +4,7 @@ type Stats = {
   pendingMixes: number;
   featuredMixes: number;
   publishedVideos: number;
+  publishedPhotos: number;
   upcomingEvents: number;
 };
 
@@ -13,12 +14,13 @@ const items: { key: keyof Stats; label: string }[] = [
   { key: "pendingMixes", label: "Pending mixes" },
   { key: "featuredMixes", label: "Featured (homepage)" },
   { key: "publishedVideos", label: "Published videos" },
+  { key: "publishedPhotos", label: "Published photos" },
   { key: "upcomingEvents", label: "Upcoming events" },
 ];
 
 export function DashboardStats({ stats }: { stats: Stats }) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
       {items.map(({ key, label }) => (
         <li
           key={key}

@@ -1,5 +1,5 @@
 import { buildCsv, csvResponse } from "@/lib/admin/csv";
-import { requireAdminSupabase } from "@/lib/admin/require-admin";
+import { requireAdminServiceRoleClient } from "@/lib/admin/require-admin";
 import type { TableRow } from "@/types/database";
 
 type MixRow = TableRow<"dj_mixes">;
@@ -20,7 +20,7 @@ const MIX_COLUMNS: readonly (keyof MixRow)[] = [
 
 export async function GET() {
   try {
-    const supabase = await requireAdminSupabase();
+    const supabase = await requireAdminServiceRoleClient();
     const { data, error } = await supabase
       .from("dj_mixes")
       .select("*")

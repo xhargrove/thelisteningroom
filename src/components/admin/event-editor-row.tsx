@@ -1,7 +1,8 @@
 "use client";
 
-import { updateEvent } from "@/app/actions/admin-dashboard";
+import { requestEventFlyerUploadSlot, updateEvent } from "@/app/actions/admin-dashboard";
 import { DeleteEventButton } from "@/components/admin/delete-event-button";
+import { uploadEventFlyerToSignedUrl } from "@/lib/events/flyer-upload";
 import type { TableRow } from "@/types/database";
 import { useState, useTransition } from "react";
 
@@ -24,6 +25,8 @@ export function EventEditorRow({ event }: { event: EventRow }) {
   const [location, setLocation] = useState(event.location);
   const [description, setDescription] = useState(event.description ?? "");
   const [rsvpLink, setRsvpLink] = useState(event.rsvp_link ?? "");
+  const [flyerImageUrl, setFlyerImageUrl] = useState(event.flyer_image_url ?? "");
+  const [flyerFile, setFlyerFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
@@ -71,26 +74,74 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           className="w-full min-w-[13rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </td>
+      <td className="py-3 pr-3 align-top">
+        <input
+          value={flyerImageUrl}
+          disabled={isPending}
+          onChange={(e) => setFlyerImageUrl(e.target.value)}
+          placeholder="https://..."
+          className="w-full min-w-[13rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+        />
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={isPending}
+          onChange={(e) => setFlyerFile(e.target.files?.[0] ?? null)}
+          className="mt-2 block w-full min-w-[13rem] text-xs text-zinc-300 file:mr-2 file:rounded-md file:border-0 file:bg-accent file:px-2.5 file:py-1 file:text-xs file:font-semibold file:text-black hover:file:bg-yellow-300 disabled:opacity-50"
+        />
+      </td>
       <td className="py-3 align-top">
         <div className="flex items-center justify-end gap-3">
           <button
             type="button"
             disabled={isPending}
             onClick={() => {
-              const payload = new FormData();
-              payload.set("id", event.id);
-              payload.set("title", title);
-              payload.set("event_date", eventDate);
-              payload.set("location", location);
-              payload.set("description", description);
-              payload.set("rsvp_link", rsvpLink);
-
               setMessage(null);
               setIsError(false);
 
               startTransition(async () => {
+                const payload = new FormData();
+                payload.set("id", event.id);
+                payload.set("title", title);
+                payload.set("event_date", eventDate);
+                payload.set("location", location);
+                payload.set("description", description);
+                payload.set("rsvp_link", rsvpLink);
+                payload.set("flyer_image_url", flyerImageUrl);
+
+                if (flyerFile) {
+                  const uploadFd = new FormData();
+                  uploadFd.set("filename", flyerFile.name);
+                  uploadFd.set("size", String(flyerFile.size));
+                  uploadFd.set("mime", flyerFile.type || "application/octet-stream");
+
+                  const slot = await requestEventFlyerUploadSlot(uploadFd);
+                  if (!slot.ok) {
+                    setMessage(slot.message ?? "Could not upload flyer.");
+                    setIsError(true);
+                    return;
+                  }
+
+                  try {
+                    await uploadEventFlyerToSignedUrl({
+                      bucket: slot.bucket,
+                      path: slot.path,
+                      token: slot.token,
+                      file: flyerFile,
+                      contentType: flyerFile.type || "application/octet-stream",
+                    });
+                  } catch (error) {
+                    setMessage(error instanceof Error ? error.message : "Could not upload flyer.");
+                    setIsError(true);
+                    return;
+                  }
+
+                  payload.set("flyer_image_url", slot.publicUrl);
+                }
+
                 const result = await updateEvent(payload);
                 if (result.ok) {
+                  setFlyerFile(null);
                   setMessage("Saved");
                   setIsError(false);
                   return;
