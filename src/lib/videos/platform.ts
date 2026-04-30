@@ -59,3 +59,29 @@ export function watchButtonLabel(platform: VideoPlatform): string {
       return "Watch";
   }
 }
+
+/** Convert common YouTube URL formats into an embeddable URL. */
+export function getYouTubeEmbedUrl(inputUrl: string): string | null {
+  try {
+    const url = new URL(inputUrl.trim());
+    const host = url.hostname.replace(/^www\./, "").toLowerCase();
+    let videoId = "";
+
+    if (host === "youtu.be") {
+      videoId = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    } else if (host === "youtube.com" || host === "m.youtube.com") {
+      if (url.pathname === "/watch") {
+        videoId = url.searchParams.get("v") ?? "";
+      } else if (url.pathname.startsWith("/shorts/") || url.pathname.startsWith("/embed/")) {
+        videoId = url.pathname.split("/")[2] ?? "";
+      }
+    }
+
+    if (!/^[a-zA-Z0-9_-]{6,}$/.test(videoId)) {
+      return null;
+    }
+    return `https://www.youtube.com/embed/${videoId}`;
+  } catch {
+    return null;
+  }
+}

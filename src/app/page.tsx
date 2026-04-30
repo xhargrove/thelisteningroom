@@ -3,7 +3,7 @@ import Link from "next/link";
 import { EmailSignupForm } from "@/components/email-signup-form";
 import { formatEventDate } from "@/lib/events/format-event-date";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { detectVideoPlatform, watchButtonLabel } from "@/lib/videos/platform";
+import { detectVideoPlatform, getYouTubeEmbedUrl, watchButtonLabel } from "@/lib/videos/platform";
 
 /** Refresh homepage periodically so featured mixes stay in sync after admin changes. */
 export const revalidate = 60;
@@ -193,9 +193,35 @@ export default async function HomePage() {
             <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {featuredVideos.map((video) => {
                 const platform = detectVideoPlatform(video.video_url);
+                const youtubeEmbedUrl =
+                  platform === "youtube" ? getYouTubeEmbedUrl(video.video_url) : null;
                 return (
                   <li key={video.id}>
                     <article className="flex h-full flex-col rounded-xl border border-accent-dim/25 bg-night-card/80 p-5">
+                      {platform === "youtube" && youtubeEmbedUrl ? (
+                        <div className="mb-4 overflow-hidden rounded-lg border border-accent-dim/20 bg-black/30">
+                          <div className="aspect-video">
+                            <iframe
+                              src={youtubeEmbedUrl}
+                              title={video.title}
+                              className="h-full w-full border-0 bg-black"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      ) : video.thumbnail_url?.trim() ? (
+                        <div className="mb-4 overflow-hidden rounded-lg border border-accent-dim/20 bg-black/30">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={video.thumbnail_url.trim()}
+                            alt={video.title}
+                            className="aspect-video w-full object-cover"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                      ) : null}
                       <p className="text-xs font-medium uppercase tracking-wider text-accent-muted">
                         {video.category?.trim() ? video.category : "Video"}
                       </p>

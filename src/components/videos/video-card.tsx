@@ -1,5 +1,6 @@
 import {
   detectVideoPlatform,
+  getYouTubeEmbedUrl,
   watchButtonLabel,
   type VideoPlatform,
 } from "@/lib/videos/platform";
@@ -43,12 +44,21 @@ function platformShortLabel(platform: VideoPlatform): string {
 
 export function VideoCard({ video }: { video: Video }) {
   const platform = detectVideoPlatform(video.video_url);
+  const youtubeEmbedUrl = platform === "youtube" ? getYouTubeEmbedUrl(video.video_url) : null;
   const watchLabel = watchButtonLabel(platform);
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-xl border border-accent-dim/25 bg-night-card shadow-lg shadow-black/20">
       <div className="relative aspect-video bg-night-elevated">
-        {platform === "mux" ? (
+        {platform === "youtube" && youtubeEmbedUrl ? (
+          <iframe
+            src={youtubeEmbedUrl}
+            title={video.title}
+            className="h-full w-full border-0 bg-black"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : platform === "mux" ? (
           <iframe
             src={video.video_url}
             title={video.title}
