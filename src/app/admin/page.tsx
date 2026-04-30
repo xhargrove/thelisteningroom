@@ -60,6 +60,8 @@ export default async function AdminPage() {
     process.env.MUX_TOKEN_ID?.trim() && process.env.MUX_TOKEN_SECRET?.trim(),
   );
 
+  const serviceRoleConfigured = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim());
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
       <div className="flex flex-col gap-4 border-b border-white/10 pb-8 sm:flex-row sm:items-start sm:justify-between">
@@ -87,6 +89,16 @@ export default async function AdminPage() {
       {dashboard.loadError ? (
         <p className="mt-6 rounded-lg border border-amber-500/30 bg-amber-950/25 px-4 py-3 text-sm text-amber-100">
           {dashboard.loadError}
+        </p>
+      ) : null}
+
+      {!serviceRoleConfigured ? (
+        <p className="mt-6 rounded-lg border border-red-500/35 bg-red-950/30 px-4 py-3 text-sm text-red-100">
+          <span className="font-semibold text-white">Dashboard saves are disabled.</span> This server
+          is missing <code className="rounded bg-black/30 px-1 py-0.5 text-red-50">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
+          (Vercel → Project → Settings → Environment Variables → Production). Add the service role
+          key from Supabase → Project Settings → API, then redeploy. Without it, video/photo/event/mix
+          updates from this page cannot run.
         </p>
       ) : null}
 

@@ -107,7 +107,7 @@ export function DashboardTables({
       <SectionCard
         id="videos"
         title="Video manager"
-        description="Add, edit, publish/unpublish, and delete videos. The public /videos page reflects published status."
+        description="Edit existing rows in the table (light fields), then Save—scroll the table horizontally to reach Actions. Public /videos shows published items only."
       >
         <div className="space-y-5">
           <VideoDeliveryGuidance />
