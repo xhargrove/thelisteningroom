@@ -1,4 +1,10 @@
-export type VideoPlatform = "youtube" | "instagram" | "tiktok" | "unknown";
+export type VideoPlatform =
+  | "youtube"
+  | "instagram"
+  | "tiktok"
+  | "mux"
+  | "hosted"
+  | "unknown";
 
 /**
  * Classify a stored video URL for labels and light UI hints.
@@ -6,8 +12,21 @@ export type VideoPlatform = "youtube" | "instagram" | "tiktok" | "unknown";
  */
 export function detectVideoPlatform(url: string): VideoPlatform {
   try {
-    const u = new URL(url.trim());
+    const trimmed = url.trim();
+    const u = new URL(trimmed);
     const host = u.hostname.replace(/^www\./, "").toLowerCase();
+    const pathname = u.pathname.toLowerCase();
+
+    if (host === "player.mux.com") {
+      return "mux";
+    }
+
+    if (/\.(mp4|webm|ogg)(\?|$)/i.test(pathname)) {
+      return "hosted";
+    }
+    if (host.endsWith("supabase.co") && pathname.includes("/storage/v1/object/public/")) {
+      return "hosted";
+    }
 
     if (host === "youtu.be" || host === "youtube.com" || host === "m.youtube.com") {
       return "youtube";
@@ -32,6 +51,10 @@ export function watchButtonLabel(platform: VideoPlatform): string {
       return "Watch on Instagram";
     case "tiktok":
       return "Watch on TikTok";
+    case "hosted":
+      return "Open file";
+    case "mux":
+      return "Open player";
     default:
       return "Watch";
   }

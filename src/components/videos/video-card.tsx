@@ -15,6 +15,10 @@ function platformBadgeClass(platform: VideoPlatform): string {
       return "bg-gradient-to-r from-purple-600/90 to-pink-500/90 text-white";
     case "tiktok":
       return "bg-zinc-900/90 text-white ring-1 ring-white/20";
+    case "mux":
+      return "bg-purple-600/90 text-white";
+    case "hosted":
+      return "bg-accent/90 text-black";
     default:
       return "bg-zinc-800/90 text-zinc-200";
   }
@@ -28,6 +32,10 @@ function platformShortLabel(platform: VideoPlatform): string {
       return "Instagram";
     case "tiktok":
       return "TikTok";
+    case "mux":
+      return "Mux";
+    case "hosted":
+      return "Upload";
     default:
       return "Link";
   }
@@ -40,7 +48,23 @@ export function VideoCard({ video }: { video: Video }) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-xl border border-accent-dim/25 bg-night-card shadow-lg shadow-black/20">
       <div className="relative aspect-video bg-night-elevated">
-        {video.thumbnail_url ? (
+        {platform === "mux" ? (
+          <iframe
+            src={video.video_url}
+            title={video.title}
+            className="h-full w-full border-0 bg-black"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+          />
+        ) : platform === "hosted" ? (
+          <video
+            src={video.video_url}
+            controls
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-contain bg-black"
+            aria-label={video.title}
+          />
+        ) : video.thumbnail_url ? (
           // Thumbnails come from varied CDN hosts (YouTube, Meta, TikTok); native img avoids huge remotePatterns.
           // eslint-disable-next-line @next/next/no-img-element
           <img

@@ -1,6 +1,7 @@
 "use client";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { formatAuthSignInError } from "@/lib/auth/format-auth-sign-in-error";
 import { isAdminUser } from "@/lib/auth/is-admin";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -28,14 +29,19 @@ export function AdminLoginForm() {
     });
 
     if (signError) {
-      setError(signError.message);
+      setError(formatAuthSignInError(signError));
       setPending(false);
       return;
     }
 
     if (!data.user || !isAdminUser(data.user)) {
       await supabase.auth.signOut();
-      setError("This account does not have admin access.");
+      const configured = Boolean(process.env.NEXT_PUBLIC_ADMIN_EMAIL?.trim());
+      setError(
+        configured
+          ? "This account does not have admin access. Use the same email as NEXT_PUBLIC_ADMIN_EMAIL, or set App Metadata role to admin for this user in Supabase."
+          : "This account does not have admin access. Set NEXT_PUBLIC_ADMIN_EMAIL to your sign-in email in .env (and Vercel for production), restart the dev server, then sign in again—or set role \"admin\" under App Metadata in Supabase.",
+      );
       setPending(false);
       return;
     }
@@ -51,7 +57,7 @@ export function AdminLoginForm() {
           className="rounded-lg border border-amber-500/30 bg-amber-950/30 px-4 py-3 text-sm text-amber-100"
           role="alert"
         >
-          Admin access only. Sign in with an account that has the admin role.
+          Admin access only. Sign in with the configured admin email or an account with admin role.
         </p>
       ) : null}
 

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { AddEventForm } from "@/components/admin/add-event-form";
 import { AddVideoForm } from "@/components/admin/add-video-form";
+import { MuxUploadForm } from "@/components/admin/mux-upload-form";
+import { VideoDeliveryGuidance } from "@/components/admin/video-delivery-guidance";
 import { DeleteMixButton } from "@/components/admin/delete-mix-button";
 import { EventEditorRow } from "@/components/admin/event-editor-row";
 import { MixStatusSelect } from "@/components/admin/mix-status-select";
@@ -26,7 +28,13 @@ function TableShell({
   );
 }
 
-export function DashboardTables({ data }: { data: AdminDashboardPayload }) {
+export function DashboardTables({
+  data,
+  muxUploadEnabled = false,
+}: {
+  data: AdminDashboardPayload;
+  muxUploadEnabled?: boolean;
+}) {
   const { emails, mixes, videos, events } = data;
 
   return (
@@ -132,7 +140,9 @@ export function DashboardTables({ data }: { data: AdminDashboardPayload }) {
         description="Add, edit, publish/unpublish, and delete videos. The public /videos page reflects published status."
       >
         <div className="space-y-5">
+          <VideoDeliveryGuidance />
           <AddVideoForm />
+          {muxUploadEnabled ? <MuxUploadForm /> : null}
           <TableShell empty={videos.length === 0}>
             <table className="min-w-[960px] w-full text-left text-sm">
               <thead>

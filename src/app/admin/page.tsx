@@ -27,6 +27,10 @@ export default async function AdminPage() {
 
   const dashboard = await loadAdminDashboard(supabase);
 
+  const muxUploadEnabled = Boolean(
+    process.env.MUX_TOKEN_ID?.trim() && process.env.MUX_TOKEN_SECRET?.trim(),
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
       <div className="flex flex-col gap-4 border-b border-accent-dim/20 pb-8 sm:flex-row sm:items-start sm:justify-between">
@@ -62,7 +66,7 @@ export default async function AdminPage() {
         <DashboardNav />
       </div>
 
-      <DashboardTables data={dashboard} />
+      <DashboardTables data={dashboard} muxUploadEnabled={muxUploadEnabled} />
     </div>
   );
 }

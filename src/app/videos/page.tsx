@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { VideoCard } from "@/components/videos/video-card";
 import { VideoGalleryEmpty } from "@/components/videos/video-gallery-empty";
+import { VideoUploadSection } from "@/components/videos/video-upload-section";
+import { isAdminUser } from "@/lib/auth/is-admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabasePublicConfig } from "@/lib/supabase/env";
 
@@ -25,6 +27,11 @@ export default async function VideosPage() {
 
   const supabase = await createSupabaseServerClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const showUpload = isAdminUser(user);
+
   const { data: rows, error } = await supabase
     .from("videos")
     .select("id, title, video_url, thumbnail_url, category, published, created_at")
@@ -48,8 +55,10 @@ export default async function VideosPage() {
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Videos</h1>
       <p className="mt-3 max-w-2xl text-zinc-400">
-        Sessions, clips, and highlights from The Listening Room — YouTube, Instagram, and TikTok.
+        Sessions, clips, and highlights from The Listening Room — embeds, links, and uploads.
       </p>
+
+      {showUpload ? <VideoUploadSection /> : null}
 
       {videos.length === 0 ? (
         <div className="mt-12">
