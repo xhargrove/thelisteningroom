@@ -219,18 +219,117 @@ export async function setVideoPublished(videoId: string, published: boolean) {
   return { ok: true as const };
 }
 
-export async function setMixStatus(mixId: string, status: string) {
-  if (!isDjMixStatus(status)) {
-    return { ok: false as const, message: "Invalid status." };
+const mixEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function parseOptionalMixUrl(raw: FormDataEntryValue | null): string | null | "__invalid__" {
+  if (typeof raw !== "string") {
+    return null;
   }
-  const supabase = await requireAdminServiceRoleClient();
-  const { error } = await supabase.from("dj_mixes").update({ status }).eq("id", mixId);
-  if (error) {
-    return { ok: false as const, message: error.message };
+  const t = raw.trim();
+  if (!t) return null;
+  try {
+    const parsed = new URL(t);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return "__invalid__";
+    }
+    return parsed.toString();
+  } catch {
+    return "__invalid__";
   }
-  revalidatePath("/admin");
-  revalidatePath("/");
-  return { ok: true as const };
+}
+
+export async function updateDjMix(formData: FormData) {
+  try {
+    const idRaw = formData.get("id");
+    const djNameRaw = formData.get("dj_name");
+    const emailRaw = formData.get("email");
+    const mixTitleRaw = formData.get("mix_title");
+    const mixLinkRaw = formData.get("mix_link");
+    const cityRaw = formData.get("city");
+    const instagramRaw = formData.get("instagram");
+    const platformRaw = formData.get("platform");
+    const notesRaw = formData.get("notes");
+    const statusRaw = formData.get("status");
+
+    const id = typeof idRaw === "string" ? idRaw.trim() : "";
+    const dj_name = typeof djNameRaw === "string" ? djNameRaw.trim() : "";
+    const emailInput = typeof emailRaw === "string" ? emailRaw.trim() : "";
+    const email = emailInput.toLowerCase();
+    const mix_title = typeof mixTitleRaw === "string" ? mixTitleRaw.trim() : "";
+    const mixLinkParsed = parseOptionalMixUrl(mixLinkRaw);
+    const city = typeof cityRaw === "string" ? cityRaw.trim() : "";
+    const instagram = typeof instagramRaw === "string" ? instagramRaw.trim() : "";
+    const platform = typeof platformRaw === "string" ? platformRaw.trim() : "";
+    const notes = typeof notesRaw === "string" ? notesRaw.trim() : "";
+    const status = typeof statusRaw === "string" ? statusRaw.trim() : "";
+
+    if (!id) {
+      return { ok: false as const, message: "Mix id is missing." };
+    }
+    if (!dj_name) {
+      return { ok: false as const, message: "DJ / artist name is required." };
+    }
+    if (dj_name.length > 200) {
+      return { ok: false as const, message: "DJ name must be 200 characters or fewer." };
+    }
+    if (!emailInput) {
+      return { ok: false as const, message: "Email is required." };
+    }
+    if (!mixEmailPattern.test(email)) {
+      return { ok: false as const, message: "Enter a valid email address." };
+    }
+    if (!mix_title) {
+      return { ok: false as const, message: "Mix title is required." };
+    }
+    if (mix_title.length > 300) {
+      return { ok: false as const, message: "Mix title must be 300 characters or fewer." };
+    }
+    if (mixLinkParsed === "__invalid__") {
+      return { ok: false as const, message: "Mix link must be a full https:// URL or empty." };
+    }
+    if (city.length > 120) {
+      return { ok: false as const, message: "City must be 120 characters or fewer." };
+    }
+    if (instagram.length > 200) {
+      return { ok: false as const, message: "Instagram must be 200 characters or fewer." };
+    }
+    if (platform.length > 80) {
+      return { ok: false as const, message: "Platform must be 80 characters or fewer." };
+    }
+    if (notes.length > 2000) {
+      return { ok: false as const, message: "Notes must be 2000 characters or fewer." };
+    }
+    if (!isDjMixStatus(status)) {
+      return { ok: false as const, message: "Invalid status." };
+    }
+
+    const patch: TableUpdate<"dj_mixes"> = {
+      dj_name,
+      email,
+      mix_title,
+      mix_link: mixLinkParsed && mixLinkParsed !== "__invalid__" ? mixLinkParsed : null,
+      city: city || null,
+      instagram: instagram || null,
+      platform: platform || null,
+      notes: notes || null,
+      status,
+    };
+
+    const supabase = await requireAdminServiceRoleClient();
+    const { error } = await supabase.from("dj_mixes").update(patch).eq("id", id);
+    if (error) {
+      return { ok: false as const, message: error.message };
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { ok: true as const };
+  } catch (error) {
+    return {
+      ok: false as const,
+      message: error instanceof Error ? error.message : "Failed to update mix.",
+    };
+  }
 }
 
 export async function deleteMix(mixId: string) {
