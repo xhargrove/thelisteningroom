@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { PhotoCard } from "@/components/photos/photo-card";
 import { PhotosEmpty } from "@/components/photos/photos-empty";
+import { PhotosInstagramCta } from "@/components/photos/photos-instagram-cta";
+import { coercePhotoUrls } from "@/lib/photos/media-urls";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabasePublicConfig } from "@/lib/supabase/env";
 
@@ -10,15 +13,51 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+function PhotosPageShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative min-h-[60vh] overflow-hidden pt-12 sm:pt-14 lg:pt-16">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent-secondary/5 via-transparent to-transparent"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <header className="mb-12 text-center sm:mb-16">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent-secondary/20 bg-accent-secondary/10 px-4 py-2">
+            <svg
+              className="h-4 w-4 shrink-0 text-accent-secondary"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.75}
+              aria-hidden
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path d="M21 15l-5-5L5 21" />
+            </svg>
+            <span className="text-sm font-medium text-zinc-200">Photo gallery</span>
+          </div>
+          <h1 className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Captured moments
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-zinc-400">
+            Relive the energy from our events — carousels, flyers, and room highlights.
+          </p>
+        </header>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export default async function PhotosPage() {
   if (!hasSupabasePublicConfig()) {
     return (
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Photos</h1>
-        <p className="mt-3 text-zinc-300">
+      <PhotosPageShell>
+        <p className="mx-auto max-w-xl text-center text-zinc-300">
           Add Supabase environment variables to load photo posts from the database.
         </p>
-      </div>
+      </PhotosPageShell>
     );
   }
 
@@ -31,37 +70,37 @@ export default async function PhotosPage() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Photos</h1>
-        <p className="mt-6 rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3 text-sm text-red-200">
+      <PhotosPageShell>
+        <p className="mx-auto max-w-xl rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3 text-center text-sm text-red-200">
           Could not load photo posts. Try again later.
         </p>
-      </div>
+      </PhotosPageShell>
     );
   }
 
   const photos = rows ?? [];
+  const listable = photos.filter((p) => coercePhotoUrls(p.media_urls).length > 0);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-      <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Photos</h1>
-      <p className="mt-3 max-w-2xl text-zinc-300">
-        Photo drops, linked moments, and carousel stories from The Listening Room.
-      </p>
-
+    <PhotosPageShell>
       {photos.length === 0 ? (
-        <div className="mt-12">
-          <PhotosEmpty />
+        <PhotosEmpty />
+      ) : listable.length === 0 ? (
+        <div className="rounded-2xl border border-amber-500/25 bg-amber-950/20 px-6 py-8 text-center text-sm text-amber-100">
+          Published posts need at least one media URL. Add direct image links or gallery URLs in admin.
         </div>
       ) : (
-        <ul className="mt-12 space-y-8">
-          {photos.map((post) => (
-            <li key={post.id}>
-              <PhotoCard post={post} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {listable.map((post, index) => (
+              <li key={post.id}>
+                <PhotoCard post={post} index={index} />
+              </li>
+            ))}
+          </ul>
+          <PhotosInstagramCta />
+        </>
       )}
-    </div>
+    </PhotosPageShell>
   );
 }

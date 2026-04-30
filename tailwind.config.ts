@@ -18,6 +18,8 @@ const config: Config = {
           DEFAULT: "#d1d5db",
           muted: "#9ca3af",
           dim: "#4b5563",
+          /** Gradient partner for hero / accents (Figma Make palette) */
+          secondary: "#64748b",
         },
       },
       fontFamily: {

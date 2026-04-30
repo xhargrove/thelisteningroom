@@ -76,44 +76,145 @@ export default async function HomePage() {
   return (
     <div className="relative overflow-hidden">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_-20%,rgba(255,255,255,0.09),transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_-20%,rgba(255,255,255,0.06),transparent)]"
         aria-hidden
       />
-      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="flex flex-col items-center text-center">
-          <Image
-            src="/logo.png"
-            alt=""
-            width={200}
-            height={220}
-            className="mb-10 h-auto w-48 sm:w-56"
-            priority
-          />
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.35em] text-zinc-400">
-            Nightlife · Sound · Community
-          </p>
-          <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-            The Listening Room
-          </h1>
-          <p className="mt-6 max-w-xl text-balance text-lg text-zinc-300 sm:text-xl">
-            Where DJs Come To Play Curated by Big X
-          </p>
-          <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/submit-mix"
-              className="ui-btn-primary inline-flex items-center justify-center px-6 py-3 text-center"
-            >
-              Submit a mix
-            </Link>
-            <Link
-              href="/events"
-              className="ui-btn-ghost inline-flex items-center justify-center px-6 py-3 text-center"
-            >
-              View events
-            </Link>
+
+      {/* Hero — layout from Figma Make “Website for Listening Room”; routes + data stay Next/Supabase */}
+      <div className="relative overflow-hidden pt-12 sm:pt-16 lg:pt-20">
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent-secondary/10"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute left-1/4 top-20 h-96 w-96 rounded-full bg-accent/20 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-accent-secondary/20 blur-3xl"
+          aria-hidden
+        />
+
+        <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-gradient-to-r from-accent/10 to-accent-secondary/10 px-4 py-2">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full bg-accent motion-safe:animate-pulse"
+                  aria-hidden
+                />
+                <span className="text-sm font-medium text-zinc-300">
+                  Atlanta&apos;s premier DJ showcase
+                </span>
+              </div>
+
+              <h1 className="text-5xl font-bold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+                <span className="block bg-gradient-to-r from-white via-white to-zinc-400 bg-clip-text text-transparent">
+                  The Listening
+                </span>
+                <span className="mt-1 block bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
+                  Room
+                </span>
+              </h1>
+
+              <p className="max-w-lg text-pretty text-lg text-zinc-400 sm:text-xl">
+                Where Atlanta&apos;s finest DJs showcase their craft. Curated by Big X — experience
+                electrifying sets and discover your next favorite artist.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/videos"
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-zinc-600 to-zinc-800 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:from-zinc-500 hover:to-zinc-700 hover:shadow-xl"
+                >
+                  <svg
+                    className="h-5 w-5 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  Watch sets
+                </Link>
+                <Link
+                  href="/events"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  <svg
+                    className="h-5 w-5 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    aria-hidden
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <path d="M16 2v4M8 2v4M3 10h18" />
+                  </svg>
+                  Upcoming events
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
+                <div>
+                  <div className="bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-3xl font-bold text-transparent">
+                    100+
+                  </div>
+                  <div className="mt-1 text-sm text-zinc-500">DJ sets</div>
+                </div>
+                <div>
+                  <div className="bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-3xl font-bold text-transparent">
+                    50K+
+                  </div>
+                  <div className="mt-1 text-sm text-zinc-500">Views</div>
+                </div>
+                <div>
+                  <div className="bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-3xl font-bold text-transparent">
+                    Weekly
+                  </div>
+                  <div className="mt-1 text-sm text-zinc-500">Events</div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/submit-mix"
+                  className="text-sm font-semibold text-zinc-300 underline-offset-4 transition hover:text-white hover:underline"
+                >
+                  Submit a mix for review →
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative flex items-center justify-center lg:h-[600px]">
+              <div
+                className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/20 to-accent-secondary/20 blur-3xl"
+                aria-hidden
+              />
+              <div className="relative aspect-square w-full max-w-md">
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent to-accent-secondary opacity-90" />
+                <div className="absolute inset-0 flex items-center justify-center p-10">
+                  <Image
+                    src="/logo.png"
+                    alt="The Listening Room"
+                    width={280}
+                    height={280}
+                    className="h-auto w-full max-w-[220px] object-contain drop-shadow-lg sm:max-w-[260px]"
+                    priority
+                  />
+                </div>
+                <div className="absolute -bottom-6 -right-6 flex h-32 w-32 items-center justify-center rounded-2xl border border-white/10 bg-accent-secondary/90 backdrop-blur-xl">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-white">LIVE</div>
+                    <div className="text-xs text-white/70">Now playing</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       <section
         className="border-t border-white/10 bg-night-elevated/70 py-14 sm:py-16"
