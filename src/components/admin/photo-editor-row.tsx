@@ -25,7 +25,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           value={title}
           disabled={isPending}
           onChange={(event) => setTitle(event.target.value)}
-          className="w-full min-w-[10rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[10rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -34,7 +34,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           rows={2}
           disabled={isPending}
           onChange={(event) => setCaption(event.target.value)}
-          className="w-full min-w-[12rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[12rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -42,7 +42,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           value={linkUrl}
           disabled={isPending}
           onChange={(event) => setLinkUrl(event.target.value)}
-          className="w-full min-w-[12rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[12rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -51,7 +51,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           rows={3}
           disabled={isPending}
           onChange={(event) => setMediaUrls(event.target.value)}
-          className="w-full min-w-[18rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[18rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -61,7 +61,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
             checked={published}
             disabled={isPending}
             onChange={(event) => setPublished(event.target.checked)}
-            className="h-4 w-4 rounded border-accent-dim/50 bg-night-card text-accent focus:ring-accent"
+            className="h-4 w-4 rounded border-white/20 bg-white/[0.03] text-zinc-100 focus:ring-zinc-400"
           />
           {published ? "Published" : "Draft"}
         </label>
@@ -96,7 +96,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
                 setIsError(true);
               });
             }}
-            className="whitespace-nowrap rounded-md border border-accent-dim/40 px-3 py-1.5 text-sm font-medium text-zinc-200 hover:border-accent/50 hover:text-white disabled:opacity-50"
+            className="ui-btn-ghost whitespace-nowrap px-3 py-1.5 disabled:opacity-50"
           >
             {isPending ? "Saving..." : "Save"}
           </button>

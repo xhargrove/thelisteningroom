@@ -83,3 +83,6 @@ yarn-error.log*
 
 # unrelated local reference folder
 /cookbook/
+
+# Supabase CLI local state
+/supabase/.temp/

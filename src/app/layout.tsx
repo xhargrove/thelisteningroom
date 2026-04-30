@@ -13,13 +13,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteDescription =
+  "Nightlife music culture — mixes, video, and events. Dark room energy, sharp sound.";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://thelisteningroomatl.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "The Listening Room",
     template: "%s · The Listening Room",
   },
-  description:
-    "Nightlife music culture — mixes, video, and events. Dark room energy, sharp sound.",
+  description: siteDescription,
+  openGraph: {
+    title: "The Listening Room",
+    description: siteDescription,
+    url: siteUrl,
+    siteName: "The Listening Room",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 819,
+        height: 1024,
+        alt: "The Listening Room",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "The Listening Room",
+    description: siteDescription,
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({

@@ -10,14 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         night: {
-          DEFAULT: "#000000",
-          elevated: "#0a0a0a",
-          card: "#111111",
+          DEFAULT: "#0b0c0f",
+          elevated: "#11141a",
+          card: "#171b22",
         },
         accent: {
-          DEFAULT: "#facc15",
-          muted: "#ca8a04",
-          dim: "#854d0e",
+          DEFAULT: "#d1d5db",
+          muted: "#9ca3af",
+          dim: "#4b5563",
         },
       },
       fontFamily: {

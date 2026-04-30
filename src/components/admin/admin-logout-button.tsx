@@ -21,7 +21,7 @@ export function AdminLogoutButton() {
       type="button"
       onClick={handleSignOut}
       disabled={pending}
-      className="rounded-lg border border-zinc-600 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-500 hover:text-white disabled:opacity-50"
+      className="ui-btn-ghost disabled:opacity-50"
     >
       {pending ? "Signing out…" : "Sign out"}
     </button>

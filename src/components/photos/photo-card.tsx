@@ -13,22 +13,22 @@ export function PhotoCard({ post }: { post: PhotoPost }) {
   const fallbackLink = post.link_url?.trim() || mediaUrls[0];
 
   return (
-    <article className="rounded-xl border border-accent-dim/25 bg-night-card/80 p-4 sm:p-5">
+    <article className="panel p-4 sm:p-5">
       {images.length > 0 ? (
         <PhotoCarousel images={images} title={post.title} />
       ) : (
-        <div className="rounded-lg border border-accent-dim/20 bg-black/30 p-4 text-sm text-zinc-300">
+        <div className="rounded-lg border border-white/10 bg-black/30 p-4 text-sm text-zinc-300">
           This post contains a shared page URL instead of a direct image file.
         </div>
       )}
       <h2 className="mt-4 text-xl font-semibold text-white">{post.title}</h2>
-      {post.caption?.trim() ? <p className="mt-2 text-sm leading-relaxed text-zinc-400">{post.caption}</p> : null}
+      {post.caption?.trim() ? <p className="mt-2 text-sm leading-relaxed text-zinc-300">{post.caption}</p> : null}
       {fallbackLink?.trim() ? (
         <a
           href={fallbackLink.trim()}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300"
+          className="ui-btn-primary mt-4 inline-flex items-center justify-center"
         >
           Open photo link
         </a>

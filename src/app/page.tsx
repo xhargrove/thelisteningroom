@@ -76,7 +76,7 @@ export default async function HomePage() {
   return (
     <div className="relative overflow-hidden">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(250,204,21,0.15),transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_-20%,rgba(255,255,255,0.09),transparent)]"
         aria-hidden
       />
       <section className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
@@ -89,25 +89,25 @@ export default async function HomePage() {
             className="mb-10 h-auto w-48 sm:w-56"
             priority
           />
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.35em] text-accent-muted">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.35em] text-zinc-400">
             Nightlife · Sound · Community
           </p>
           <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
             The Listening Room
           </h1>
-          <p className="mt-6 max-w-xl text-balance text-lg text-zinc-400 sm:text-xl">
+          <p className="mt-6 max-w-xl text-balance text-lg text-zinc-300 sm:text-xl">
             Where DJs Come To Play Curated by Big X
           </p>
           <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/submit-mix"
-              className="inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3 text-center text-sm font-semibold text-black transition hover:bg-yellow-300"
+              className="ui-btn-primary inline-flex items-center justify-center px-6 py-3 text-center"
             >
               Submit a mix
             </Link>
             <Link
               href="/events"
-              className="inline-flex items-center justify-center rounded-lg border border-accent/40 bg-transparent px-6 py-3 text-center text-sm font-semibold text-accent transition hover:border-accent hover:bg-accent/10"
+              className="ui-btn-ghost inline-flex items-center justify-center px-6 py-3 text-center"
             >
               View events
             </Link>
@@ -116,7 +116,7 @@ export default async function HomePage() {
       </section>
 
       <section
-        className="border-t border-accent-dim/25 bg-night-elevated/80 py-14 sm:py-16"
+        className="border-t border-white/10 bg-night-elevated/70 py-14 sm:py-16"
         aria-labelledby="featured-mixes-heading"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -126,7 +126,7 @@ export default async function HomePage() {
           >
             Featured DJ mixes
           </h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-sm text-zinc-400">
+          <p className="mx-auto mt-2 max-w-lg text-center text-sm text-zinc-300">
             Handpicked sets from The Listening Room.
           </p>
 
@@ -138,21 +138,21 @@ export default async function HomePage() {
             <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {featuredMixes.map((mix) => (
                 <li key={mix.id}>
-                  <article className="flex h-full flex-col rounded-xl border border-accent-dim/25 bg-night-card/80 p-5">
-                    <p className="text-xs font-medium uppercase tracking-wider text-accent-muted">
+                  <article className="panel-subtle flex h-full flex-col p-5">
+                    <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
                       {mix.platform?.trim() ? mix.platform : "Mix"}
                     </p>
                     <h3 className="mt-2 text-lg font-semibold leading-snug text-white">
                       {mix.mix_title}
                     </h3>
-                    <p className="mt-1 text-sm text-zinc-400">{mix.dj_name}</p>
+                    <p className="mt-1 text-sm text-zinc-300">{mix.dj_name}</p>
                     <div className="mt-5 mt-auto pt-2">
                       {mix.mix_link?.trim() ? (
                         <a
                           href={mix.mix_link.trim()}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300"
+                          className="ui-btn-primary inline-flex items-center justify-center"
                         >
                           Open mix
                         </a>
@@ -171,7 +171,7 @@ export default async function HomePage() {
       </section>
 
       <section
-        className="border-t border-accent-dim/25 bg-night/90 py-14 sm:py-16"
+        className="border-t border-white/10 bg-night/80 py-14 sm:py-16"
         aria-labelledby="featured-videos-heading"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -181,7 +181,7 @@ export default async function HomePage() {
           >
             Featured videos
           </h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-sm text-zinc-400">
+          <p className="mx-auto mt-2 max-w-lg text-center text-sm text-zinc-300">
             Published clips and sets from the room.
           </p>
 
@@ -197,9 +197,9 @@ export default async function HomePage() {
                   platform === "youtube" ? getYouTubeEmbedUrl(video.video_url) : null;
                 return (
                   <li key={video.id}>
-                    <article className="flex h-full flex-col rounded-xl border border-accent-dim/25 bg-night-card/80 p-5">
+                    <article className="panel-subtle flex h-full flex-col p-5">
                       {platform === "youtube" && youtubeEmbedUrl ? (
-                        <div className="mb-4 overflow-hidden rounded-lg border border-accent-dim/20 bg-black/30">
+                        <div className="mb-4 overflow-hidden rounded-lg border border-white/10 bg-black/30">
                           <div className="aspect-video">
                             <iframe
                               src={youtubeEmbedUrl}
@@ -211,7 +211,7 @@ export default async function HomePage() {
                           </div>
                         </div>
                       ) : video.thumbnail_url?.trim() ? (
-                        <div className="mb-4 overflow-hidden rounded-lg border border-accent-dim/20 bg-black/30">
+                        <div className="mb-4 overflow-hidden rounded-lg border border-white/10 bg-black/30">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={video.thumbnail_url.trim()}
@@ -222,19 +222,19 @@ export default async function HomePage() {
                           />
                         </div>
                       ) : null}
-                      <p className="text-xs font-medium uppercase tracking-wider text-accent-muted">
+                      <p className="text-xs font-medium uppercase tracking-wider text-zinc-400">
                         {video.category?.trim() ? video.category : "Video"}
                       </p>
                       <h3 className="mt-2 text-lg font-semibold leading-snug text-white">
                         {video.title}
                       </h3>
-                      <p className="mt-1 text-sm text-zinc-500 capitalize">{platform}</p>
+                      <p className="mt-1 text-sm text-zinc-400 capitalize">{platform}</p>
                       <div className="mt-5 mt-auto pt-2">
                         <a
                           href={video.video_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300"
+                          className="ui-btn-primary inline-flex items-center justify-center"
                         >
                           {watchButtonLabel(platform)}
                         </a>
@@ -251,7 +251,7 @@ export default async function HomePage() {
       </section>
 
       <section
-        className="border-t border-accent-dim/25 bg-night-elevated/80 py-14 sm:py-16"
+        className="border-t border-white/10 bg-night-elevated/70 py-14 sm:py-16"
         aria-labelledby="upcoming-event-heading"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -267,9 +267,9 @@ export default async function HomePage() {
               Add Supabase environment variables to load upcoming events.
             </p>
           ) : upcomingEvent ? (
-            <article className="mx-auto mt-8 max-w-2xl rounded-xl border border-accent-dim/25 bg-night-card/80 p-6 sm:p-7">
+            <article className="panel mx-auto mt-8 max-w-2xl p-6 sm:p-7">
               {upcomingEvent.flyer_image_url?.trim() ? (
-                <div className="mb-6 overflow-hidden rounded-lg border border-accent-dim/25 bg-black/30">
+                <div className="mb-6 overflow-hidden rounded-lg border border-white/10 bg-black/30">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={upcomingEvent.flyer_image_url.trim()}
@@ -279,13 +279,13 @@ export default async function HomePage() {
                   />
                 </div>
               ) : null}
-              <time className="text-xs font-semibold uppercase tracking-wider text-accent">
+              <time className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
                 {formatEventDate(upcomingEvent.event_date)}
               </time>
               <h3 className="mt-2 text-2xl font-semibold text-white">{upcomingEvent.title}</h3>
-              <p className="mt-2 text-sm font-medium text-zinc-300">{upcomingEvent.location}</p>
+              <p className="mt-2 text-sm font-medium text-zinc-200">{upcomingEvent.location}</p>
               {upcomingEvent.description?.trim() ? (
-                <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+                <p className="mt-4 text-sm leading-relaxed text-zinc-300">
                   {upcomingEvent.description}
                 </p>
               ) : null}
@@ -295,14 +295,14 @@ export default async function HomePage() {
                     href={upcomingEvent.rsvp_link.trim()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-yellow-300"
+                    className="ui-btn-primary inline-flex items-center justify-center px-5 py-2.5"
                   >
                     RSVP
                   </a>
                 ) : null}
                 <Link
                   href="/events"
-                  className="inline-flex items-center justify-center rounded-lg border border-accent/40 bg-transparent px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent hover:bg-accent/10"
+                  className="ui-btn-ghost inline-flex items-center justify-center px-5 py-2.5"
                 >
                   View all events
                 </Link>
@@ -316,24 +316,24 @@ export default async function HomePage() {
 
       <EmailSignupForm />
 
-      <section className="border-t border-accent-dim/25 bg-night/90 py-14 sm:py-16">
+      <section className="border-t border-white/10 bg-night/80 py-14 sm:py-16">
         <div className="mx-auto grid max-w-6xl gap-5 px-4 sm:grid-cols-2 sm:px-6">
-          <article className="rounded-xl border border-accent-dim/25 bg-night-card/80 p-6">
+          <article className="panel-subtle p-6">
             <h2 className="text-2xl font-semibold text-white">Submit your mix</h2>
-            <p className="mt-2 text-sm text-zinc-400">
+            <p className="mt-2 text-sm text-zinc-300">
               Send your latest set to The Listening Room team for review.
             </p>
             <Link
               href="/submit-mix"
-              className="mt-5 inline-flex items-center justify-center rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-yellow-300"
+              className="ui-btn-primary mt-5 inline-flex items-center justify-center px-5 py-2.5"
             >
               Submit mix
             </Link>
           </article>
 
-          <article className="rounded-xl border border-accent-dim/25 bg-night-card/80 p-6">
+          <article className="panel-subtle p-6">
             <h2 className="text-2xl font-semibold text-white">Follow us</h2>
-            <p className="mt-2 text-sm text-zinc-400">
+            <p className="mt-2 text-sm text-zinc-300">
               Stay tuned for drops, event announcements, and room highlights.
             </p>
             <div className="mt-5 flex flex-wrap gap-2.5">
@@ -341,7 +341,7 @@ export default async function HomePage() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-accent/40 px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent hover:bg-accent/10"
+                className="ui-btn-ghost inline-flex items-center justify-center px-4 py-2"
               >
                 Instagram
               </a>
@@ -349,7 +349,7 @@ export default async function HomePage() {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-accent/40 px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent hover:bg-accent/10"
+                className="ui-btn-ghost inline-flex items-center justify-center px-4 py-2"
               >
                 YouTube
               </a>
@@ -357,7 +357,7 @@ export default async function HomePage() {
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-lg border border-accent/40 px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent hover:bg-accent/10"
+                className="ui-btn-ghost inline-flex items-center justify-center px-4 py-2"
               >
                 TikTok
               </a>

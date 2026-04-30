@@ -16,7 +16,7 @@ export function DashboardNav() {
         <a
           key={href}
           href={href}
-          className="shrink-0 rounded-full border border-accent-dim/35 bg-night-card/80 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-accent/50 hover:text-accent"
+          className="shrink-0 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-white/30 hover:bg-white/[0.07] hover:text-white"
         >
           {label}
         </a>

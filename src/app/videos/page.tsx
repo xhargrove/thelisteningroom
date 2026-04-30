@@ -16,7 +16,7 @@ export default async function VideosPage() {
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Videos</h1>
-        <p className="mt-3 max-w-2xl text-zinc-400">
+        <p className="mt-3 max-w-2xl text-zinc-300">
           Add Supabase environment variables to load videos from the database.
         </p>
       </div>
@@ -47,7 +47,7 @@ export default async function VideosPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Videos</h1>
-      <p className="mt-3 max-w-2xl text-zinc-400">
+      <p className="mt-3 max-w-2xl text-zinc-300">
         Sessions, clips, and highlights from The Listening Room — embeds, links, and uploads.
       </p>
 

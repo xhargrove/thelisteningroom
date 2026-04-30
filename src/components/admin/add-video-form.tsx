@@ -10,7 +10,7 @@ export function AddVideoForm() {
 
   return (
     <form
-      className="rounded-lg border border-accent-dim/25 bg-night-card/70 p-4 sm:p-5"
+      className="panel-subtle p-4 sm:p-5"
       onSubmit={(event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -39,7 +39,7 @@ export function AddVideoForm() {
             name="title"
             required
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
         <label className="flex flex-col gap-1.5">
@@ -47,7 +47,7 @@ export function AddVideoForm() {
           <input
             name="category"
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
         <label className="flex flex-col gap-1.5 sm:col-span-2">
@@ -58,7 +58,7 @@ export function AddVideoForm() {
             required
             disabled={isPending}
             placeholder="https://..."
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
         <label className="flex flex-col gap-1.5 sm:col-span-2">
@@ -68,7 +68,7 @@ export function AddVideoForm() {
             name="thumbnail_url"
             disabled={isPending}
             placeholder="https://..."
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
       </div>
@@ -78,7 +78,7 @@ export function AddVideoForm() {
           type="checkbox"
           name="published"
           disabled={isPending}
-          className="h-4 w-4 rounded border-accent-dim/50 bg-night-elevated text-accent focus:ring-accent"
+          className="h-4 w-4 rounded border-white/20 bg-white/[0.04] text-zinc-200 focus:ring-zinc-400"
         />
         Published
       </label>
@@ -87,7 +87,7 @@ export function AddVideoForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
+          className="ui-btn-primary"
         >
           {isPending ? "Saving..." : "Add video"}
         </button>

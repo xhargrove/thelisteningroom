@@ -21,7 +21,7 @@ function TableShell({
   empty: boolean;
 }) {
   if (empty) {
-    return <p className="text-sm text-zinc-500">Nothing here yet.</p>;
+    return <p className="text-sm text-zinc-400">Nothing here yet.</p>;
   }
   return (
     <div className="-mx-4 overflow-x-auto sm:mx-0">
@@ -49,14 +49,14 @@ export function DashboardTables({
         <TableShell empty={emails.length === 0}>
           <table className="min-w-[640px] w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+              <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
                 <th className="pb-3 pr-4 font-medium">Name</th>
                 <th className="pb-3 pr-4 font-medium">Email</th>
                 <th className="pb-3 pr-4 font-medium">Role</th>
                 <th className="pb-3 font-medium">Signed up</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-accent-dim/15">
+            <tbody className="divide-y divide-white/10">
               {emails.map((row) => (
                 <tr key={row.id} className="text-zinc-300">
                   <td className="py-3 pr-4 align-top">{row.name}</td>
@@ -84,7 +84,7 @@ export function DashboardTables({
         <TableShell empty={mixes.length === 0}>
           <table className="min-w-[900px] w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+              <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
                 <th className="pb-3 pr-4 font-medium">DJ</th>
                 <th className="pb-3 pr-4 font-medium">Title</th>
                 <th className="pb-3 pr-4 font-medium">Email</th>
@@ -94,7 +94,7 @@ export function DashboardTables({
                 <th className="pb-3 font-medium text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-accent-dim/15">
+            <tbody className="divide-y divide-white/10">
               {mixes.map((row) => (
                 <tr key={row.id} className="text-zinc-300">
                   <td className="py-3 pr-4 align-top">{row.dj_name}</td>
@@ -148,7 +148,7 @@ export function DashboardTables({
           <TableShell empty={videos.length === 0}>
             <table className="min-w-[960px] w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+              <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
                   <th className="pb-3 pr-3 font-medium">Title</th>
                   <th className="pb-3 pr-3 font-medium">Video URL</th>
                   <th className="pb-3 pr-3 font-medium">Thumbnail URL</th>
@@ -157,7 +157,7 @@ export function DashboardTables({
                   <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-accent-dim/15">
+              <tbody className="divide-y divide-white/10">
                 {videos.map((row) => (
                   <VideoEditorRow key={row.id} video={row} />
                 ))}
@@ -177,7 +177,7 @@ export function DashboardTables({
           <TableShell empty={photos.length === 0}>
             <table className="min-w-[1220px] w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+                <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
                   <th className="pb-3 pr-3 font-medium">Title</th>
                   <th className="pb-3 pr-3 font-medium">Caption</th>
                   <th className="pb-3 pr-3 font-medium">Link</th>
@@ -186,7 +186,7 @@ export function DashboardTables({
                   <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-accent-dim/15">
+              <tbody className="divide-y divide-white/10">
                 {photos.map((row) => (
                   <PhotoEditorRow key={row.id} post={row} />
                 ))}
@@ -206,7 +206,7 @@ export function DashboardTables({
           <TableShell empty={events.length === 0}>
             <table className="min-w-[1360px] w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-accent-dim/20 text-xs uppercase tracking-wide text-zinc-500">
+                <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
                   <th className="pb-3 pr-3 font-medium">When</th>
                   <th className="pb-3 pr-3 font-medium">Title</th>
                   <th className="pb-3 pr-3 font-medium">Location</th>
@@ -216,7 +216,7 @@ export function DashboardTables({
                   <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-accent-dim/15">
+              <tbody className="divide-y divide-white/10">
                 {events.map((row) => (
                   <EventEditorRow key={row.id} event={row} />
                 ))}

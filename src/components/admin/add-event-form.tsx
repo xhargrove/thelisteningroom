@@ -11,7 +11,7 @@ export function AddEventForm() {
 
   return (
     <form
-      className="rounded-lg border border-accent-dim/25 bg-night-card/70 p-4 sm:p-5"
+      className="panel-subtle p-4 sm:p-5"
       onSubmit={(event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -75,7 +75,7 @@ export function AddEventForm() {
             name="title"
             required
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
 
@@ -86,7 +86,7 @@ export function AddEventForm() {
             name="event_date"
             required
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
 
@@ -96,7 +96,7 @@ export function AddEventForm() {
             name="location"
             required
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
 
@@ -106,7 +106,7 @@ export function AddEventForm() {
             name="description"
             rows={3}
             disabled={isPending}
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
 
@@ -118,7 +118,7 @@ export function AddEventForm() {
             name="flyer_image_url"
             disabled={isPending}
             placeholder="https://..."
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
         <label className="flex flex-col gap-1.5 sm:col-span-2">
@@ -138,7 +138,7 @@ export function AddEventForm() {
             name="rsvp_link"
             disabled={isPending}
             placeholder="https://..."
-            className="rounded-md border border-accent-dim/30 bg-night-elevated px-3 py-2 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="ui-input px-3 py-2 text-sm"
           />
         </label>
       </div>
@@ -147,7 +147,7 @@ export function AddEventForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-yellow-300 disabled:opacity-60"
+          className="ui-btn-primary"
         >
           {isPending ? "Saving..." : "Add event"}
         </button>

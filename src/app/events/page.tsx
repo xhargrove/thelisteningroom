@@ -14,9 +14,9 @@ export const dynamic = "force-dynamic";
 export default async function EventsPage() {
   if (!hasSupabasePublicConfig()) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Events</h1>
-        <p className="mt-3 text-zinc-400">
+        <p className="mt-3 text-zinc-300">
           Add Supabase environment variables to load events from the database.
         </p>
       </div>
@@ -35,7 +35,7 @@ export default async function EventsPage() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Events</h1>
         <p className="mt-6 rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3 text-sm text-red-200">
           Could not load events. Try again later.
@@ -47,9 +47,9 @@ export default async function EventsPage() {
   const events = rows ?? [];
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Events</h1>
-      <p className="mt-3 text-zinc-400">
+      <p className="mt-3 text-zinc-300">
         Weekly showcases and special nights at The Listening Room—grouped by calendar week.
       </p>
 

@@ -54,7 +54,7 @@ export function AdminLoginForm() {
     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
       {searchParams.get("error") === "forbidden" ? (
         <p
-          className="rounded-lg border border-amber-500/30 bg-amber-950/30 px-4 py-3 text-sm text-amber-100"
+          className="rounded-xl border border-amber-400/30 bg-amber-950/30 px-4 py-3 text-sm text-amber-100"
           role="alert"
         >
           Admin access only. Sign in with the configured admin email or an account with admin role.
@@ -62,13 +62,13 @@ export function AdminLoginForm() {
       ) : null}
 
       {error ? (
-        <p className="rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3 text-sm text-red-200" role="alert">
+        <p className="rounded-xl border border-red-500/30 bg-red-950/30 px-4 py-3 text-sm text-red-200" role="alert">
           {error}
         </p>
       ) : null}
 
       <div>
-        <label htmlFor="admin-email" className="block text-sm font-medium text-zinc-300">
+        <label htmlFor="admin-email" className="block text-sm font-medium text-zinc-200">
           Email
         </label>
         <input
@@ -80,12 +80,12 @@ export function AdminLoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={pending}
-          className="mt-2 w-full rounded-lg border border-accent-dim/30 bg-night-card px-4 py-3 text-white placeholder:text-zinc-600 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50"
+          className="ui-input mt-2 w-full px-4 py-3 disabled:opacity-50"
         />
       </div>
 
       <div>
-        <label htmlFor="admin-password" className="block text-sm font-medium text-zinc-300">
+        <label htmlFor="admin-password" className="block text-sm font-medium text-zinc-200">
           Password
         </label>
         <input
@@ -97,14 +97,14 @@ export function AdminLoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={pending}
-          className="mt-2 w-full rounded-lg border border-accent-dim/30 bg-night-card px-4 py-3 text-white placeholder:text-zinc-600 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50"
+          className="ui-input mt-2 w-full px-4 py-3 disabled:opacity-50"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-black transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
+        className="ui-btn-primary w-full px-4 py-3 disabled:cursor-not-allowed"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

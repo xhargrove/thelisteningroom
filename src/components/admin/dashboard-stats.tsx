@@ -24,9 +24,9 @@ export function DashboardStats({ stats }: { stats: Stats }) {
       {items.map(({ key, label }) => (
         <li
           key={key}
-          className="rounded-xl border border-accent-dim/30 bg-night-card/90 px-4 py-4 text-center sm:px-5 sm:text-left"
+          className="panel-subtle px-4 py-4 text-center sm:px-5 sm:text-left"
         >
-          <p className="text-2xl font-bold tabular-nums text-accent sm:text-3xl">{stats[key]}</p>
+          <p className="text-2xl font-bold tabular-nums text-zinc-100 sm:text-3xl">{stats[key]}</p>
           <p className="mt-1 text-xs leading-snug text-zinc-400">{label}</p>
         </li>
       ))}

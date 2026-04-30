@@ -15,7 +15,7 @@ export default async function PhotosPage() {
     return (
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Photos</h1>
-        <p className="mt-3 text-zinc-400">
+        <p className="mt-3 text-zinc-300">
           Add Supabase environment variables to load photo posts from the database.
         </p>
       </div>
@@ -45,7 +45,7 @@ export default async function PhotosPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
       <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Photos</h1>
-      <p className="mt-3 max-w-2xl text-zinc-400">
+      <p className="mt-3 max-w-2xl text-zinc-300">
         Photo drops, linked moments, and carousel stories from The Listening Room.
       </p>
 

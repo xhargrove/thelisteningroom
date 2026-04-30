@@ -19,8 +19,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-accent-dim/40 bg-night/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-night/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
         <Link
           href="/"
           className="flex shrink-0 items-center gap-3"
@@ -34,7 +34,7 @@ export function SiteHeader() {
             className="h-9 w-auto sm:h-10"
             priority
           />
-          <span className="hidden font-semibold tracking-tight text-accent sm:inline sm:text-base">
+          <span className="hidden font-semibold tracking-tight text-zinc-100 sm:inline sm:text-base">
             The Listening Room
           </span>
         </Link>
@@ -46,10 +46,10 @@ export function SiteHeader() {
               <Link
                 key={href}
                 href={href}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-accent/15 text-accent"
-                    : "text-zinc-300 hover:bg-white/5 hover:text-accent"
+                    ? "bg-white/[0.09] text-white"
+                    : "text-zinc-300 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
                 {label}
@@ -60,7 +60,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md border border-accent-dim/50 p-2 text-accent md:hidden"
+          className="inline-flex items-center justify-center rounded-lg border border-white/15 p-2 text-zinc-200 md:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           onClick={() => setOpen((v) => !v)}
@@ -81,7 +81,7 @@ export function SiteHeader() {
       {open ? (
         <nav
           id="mobile-nav"
-          className="border-t border-accent-dim/40 bg-night-elevated px-4 py-3 md:hidden"
+          className="border-t border-white/10 bg-night-elevated px-4 py-3 md:hidden"
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-1">
@@ -91,10 +91,10 @@ export function SiteHeader() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`block rounded-md px-3 py-2.5 text-sm font-medium ${
+                    className={`block rounded-lg px-3.5 py-2.5 text-sm font-medium ${
                       active
-                        ? "bg-accent/15 text-accent"
-                        : "text-zinc-200 hover:bg-white/5 hover:text-accent"
+                        ? "bg-white/[0.09] text-white"
+                        : "text-zinc-200 hover:bg-white/[0.06] hover:text-white"
                     }`}
                     onClick={() => setOpen(false)}
                   >

@@ -38,7 +38,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           type="datetime-local"
           disabled={isPending}
           onChange={(e) => setEventDate(e.target.value)}
-          className="w-full min-w-[11rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[11rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -46,7 +46,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           value={title}
           disabled={isPending}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full min-w-[10rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[10rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -54,7 +54,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           value={location}
           disabled={isPending}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-full min-w-[10rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[10rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -63,7 +63,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           value={description}
           disabled={isPending}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full min-w-[13rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[13rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -71,7 +71,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           value={rsvpLink}
           disabled={isPending}
           onChange={(e) => setRsvpLink(e.target.value)}
-          className="w-full min-w-[13rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[13rem] px-2 py-1.5 text-sm"
         />
       </td>
       <td className="py-3 pr-3 align-top">
@@ -80,7 +80,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
           disabled={isPending}
           onChange={(e) => setFlyerImageUrl(e.target.value)}
           placeholder="https://..."
-          className="w-full min-w-[13rem] rounded-md border border-accent-dim/30 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="ui-input w-full min-w-[13rem] px-2 py-1.5 text-sm"
         />
         <input
           type="file"
@@ -150,7 +150,7 @@ export function EventEditorRow({ event }: { event: EventRow }) {
                 setIsError(true);
               });
             }}
-            className="whitespace-nowrap rounded-md border border-accent-dim/40 px-3 py-1.5 text-sm font-medium text-zinc-200 hover:border-accent/50 hover:text-white disabled:opacity-50"
+            className="ui-btn-ghost whitespace-nowrap px-3 py-1.5 disabled:opacity-50"
           >
             {isPending ? "Saving..." : "Save"}
           </button>

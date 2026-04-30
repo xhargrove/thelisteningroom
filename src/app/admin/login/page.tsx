@@ -9,21 +9,19 @@ export const metadata: Metadata = {
 };
 
 function LoginFormFallback() {
-  return (
-    <div className="mt-8 h-64 animate-pulse rounded-lg bg-night-elevated/80" aria-hidden />
-  );
+  return <div className="mt-8 h-64 animate-pulse rounded-xl bg-white/[0.04]" aria-hidden />;
 }
 
 export default function AdminLoginPage() {
   return (
     <div className="mx-auto max-w-md px-4 py-16 sm:px-6 sm:py-24">
-      <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-accent-muted">
+      <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
         Staff
       </p>
       <h1 className="mt-2 text-center text-2xl font-bold tracking-tight text-white sm:text-3xl">
         Admin sign in
       </h1>
-      <p className="mt-2 text-center text-sm text-zinc-500">
+      <p className="mt-2 text-center text-sm text-zinc-400">
         The Listening Room — authorized users only.
       </p>
 
@@ -31,8 +29,8 @@ export default function AdminLoginPage() {
         <AdminLoginForm />
       </Suspense>
 
-      <p className="mt-8 text-center text-sm text-zinc-600">
-        <Link href="/" className="text-zinc-400 hover:text-accent">
+      <p className="mt-8 text-center text-sm text-zinc-500">
+        <Link href="/" className="text-zinc-300 transition hover:text-white">
           ← Back to site
         </Link>
       </p>

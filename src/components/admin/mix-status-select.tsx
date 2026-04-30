@@ -19,7 +19,7 @@ export function MixStatusSelect({ mixId, value }: { mixId: string; value: string
           await setMixStatus(mixId, next);
         });
       }}
-      className="w-full min-w-[8.5rem] rounded-md border border-accent-dim/40 bg-night-card px-2 py-1.5 text-sm text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50 sm:w-auto"
+      className="ui-input w-full min-w-[8.5rem] px-2 py-1.5 text-sm disabled:opacity-50 sm:w-auto"
       aria-label="Mix status"
     >
       {!known ? (

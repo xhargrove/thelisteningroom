@@ -3,18 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --background: #000000;
-  --foreground: #fafafa;
-  --accent: #facc15;
+  --background: #0b0c0f;
+  --foreground: #f3f4f6;
+  --accent: #cdd4df;
+  --surface-1: #11141a;
+  --surface-2: #171b22;
+  --border-muted: #2b303a;
+  --text-muted: #9ca3af;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  background-image: radial-gradient(circle at 10% 0%, rgba(205, 212, 223, 0.08), transparent 40%);
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-white/10 bg-white/[0.03] shadow-[0_18px_40px_-24px_rgba(0,0,0,0.9)];
+  }
+
+  .panel-subtle {
+    @apply rounded-xl border border-white/10 bg-white/[0.02];
+  }
+
+  .ui-input {
+    @apply rounded-xl border border-white/10 bg-white/[0.03] text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-500/30;
+  }
+
+  .ui-btn-primary {
+    @apply rounded-xl bg-zinc-100 px-4 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-white disabled:opacity-60;
+  }
+
+  .ui-btn-ghost {
+    @apply rounded-xl border border-white/15 bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-zinc-200 transition hover:border-white/30 hover:bg-white/[0.06];
   }
 }
