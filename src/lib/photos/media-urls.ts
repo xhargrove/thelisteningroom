@@ -10,3 +10,14 @@ export function coercePhotoUrls(value: Json): string[] {
 export function urlsToTextarea(urls: string[]): string {
   return urls.join("\n");
 }
+
+export function isDirectImageUrl(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  try {
+    const parsed = new URL(trimmed);
+    return /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(parsed.pathname.toLowerCase());
+  } catch {
+    return false;
+  }
+}

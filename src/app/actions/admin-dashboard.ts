@@ -7,6 +7,7 @@ import {
   requireAdminServiceRoleClient,
 } from "@/lib/admin/require-admin";
 import { getEventFlyerBucketId } from "@/lib/storage/event-flyer-bucket";
+import { getPhotoPostBucketId } from "@/lib/storage/photo-post-bucket";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert, TableUpdate } from "@/types/database";
 
@@ -49,13 +50,33 @@ function parsePhotoUrlList(value: FormDataEntryValue | null): string[] {
   for (const raw of value.split(/\r?\n|,/g)) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
-    unique.add(requireUrl(trimmed, "Photo URL"));
+    unique.add(requireDirectImageUrl(trimmed));
   }
   return Array.from(unique);
 }
 
+function requireDirectImageUrl(value: string): string {
+  const url = requireUrl(value, "Photo URL");
+  const parsed = new URL(url);
+  const pathname = parsed.pathname.toLowerCase();
+  if (!/\.(jpg|jpeg|png|webp|gif|avif)$/i.test(pathname)) {
+    throw new Error(
+      "Photo URL must be a direct image file (.jpg, .png, .webp, .gif, .avif). Shared album/page links will not render.",
+    );
+  }
+  return parsed.toString();
+}
+
 const EVENT_FLYER_MAX_BYTES = 10 * 1024 * 1024;
 const EVENT_FLYER_ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+const PHOTO_UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
+const PHOTO_ALLOWED_MIME = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+]);
 
 function sanitizeStorageFileName(name: string): string {
   const base = name.split(/[/\\]/).pop() ?? "flyer";
@@ -67,6 +88,14 @@ function isAllowedFlyerMime(mime: string, filename: string): boolean {
   if (EVENT_FLYER_ALLOWED_MIME.has(mime)) return true;
   if (mime === "" || mime === "application/octet-stream") {
     return /\.(jpg|jpeg|png|webp)$/i.test(filename);
+  }
+  return false;
+}
+
+function isAllowedPhotoMime(mime: string, filename: string): boolean {
+  if (PHOTO_ALLOWED_MIME.has(mime)) return true;
+  if (mime === "" || mime === "application/octet-stream") {
+    return /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(filename);
   }
   return false;
 }
@@ -121,6 +150,60 @@ export async function requestEventFlyerUploadSlot(formData: FormData) {
     return {
       ok: false as const,
       message: error instanceof Error ? error.message : "Could not upload flyer.",
+    };
+  }
+}
+
+export async function requestPhotoUploadSlot(formData: FormData) {
+  try {
+    await assertAdminAccess();
+
+    const nameRaw = formData.get("filename");
+    const sizeRaw = formData.get("size");
+    const mimeRaw = formData.get("mime");
+
+    const filename = typeof nameRaw === "string" ? nameRaw.trim() : "";
+    const size = typeof sizeRaw === "string" ? Number(sizeRaw) : NaN;
+    const mime = typeof mimeRaw === "string" ? mimeRaw.trim() : "";
+
+    if (!filename || !Number.isFinite(size) || size <= 0) {
+      return { ok: false as const, message: "Invalid photo file." };
+    }
+    if (size > PHOTO_UPLOAD_MAX_BYTES) {
+      return { ok: false as const, message: "Photo must be 10MB or smaller." };
+    }
+    if (!isAllowedPhotoMime(mime, filename)) {
+      return { ok: false as const, message: "Photo must be JPG, PNG, WebP, GIF, or AVIF." };
+    }
+
+    const bucket = getPhotoPostBucketId();
+    const path = `photos/posts/${crypto.randomUUID()}/${sanitizeStorageFileName(filename)}`;
+
+    const service = createSupabaseServiceRoleClient();
+    const { data, error } = await service.storage.from(bucket).createSignedUploadUrl(path);
+    if (error || !data) {
+      return {
+        ok: false as const,
+        message: error?.message ?? "Could not start photo upload.",
+      };
+    }
+
+    const {
+      data: { publicUrl },
+    } = service.storage.from(bucket).getPublicUrl(path);
+
+    return {
+      ok: true as const,
+      bucket,
+      path: data.path,
+      token: data.token,
+      signedUrl: data.signedUrl,
+      publicUrl,
+    };
+  } catch (error) {
+    return {
+      ok: false as const,
+      message: error instanceof Error ? error.message : "Could not upload photo.",
     };
   }
 }

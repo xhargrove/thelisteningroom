@@ -96,7 +96,7 @@ export default async function HomePage() {
             The Listening Room
           </h1>
           <p className="mt-6 max-w-xl text-balance text-lg text-zinc-400 sm:text-xl">
-            A home for mixes, sessions, and late-night energy. Tune in, show up, stay loud.
+            Where DJs Come To Play Curated by Big X
           </p>
           <div className="mt-10 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
