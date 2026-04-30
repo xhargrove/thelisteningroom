@@ -6,19 +6,33 @@ import { getSupabasePublicConfig } from "@/lib/supabase/env";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
+function withAdminNoStore(response: NextResponse) {
+  response.headers.set("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  response.headers.set("Pragma", "no-cache");
+  return response;
+}
+
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  const response = withAdminNoStore(
+    NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    }),
+  );
 
   let url: string;
   let anonKey: string;
   try {
     ({ url, anonKey } = getSupabasePublicConfig());
   } catch {
-    return response;
+    return withAdminNoStore(
+      NextResponse.next({
+        request: {
+          headers: request.headers,
+        },
+      }),
+    );
   }
 
   const supabase = createServerClient(url, anonKey, {
@@ -43,7 +57,7 @@ export async function middleware(request: NextRequest) {
 
   if (isLoginRoute) {
     if (user && isAdminUser(user)) {
-      return NextResponse.redirect(new URL("/admin", request.url));
+      return withAdminNoStore(NextResponse.redirect(new URL("/admin", request.url)));
     }
     return response;
   }
@@ -51,13 +65,13 @@ export async function middleware(request: NextRequest) {
   if (!user) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    return withAdminNoStore(NextResponse.redirect(loginUrl));
   }
 
   if (!isAdminUser(user)) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("error", "forbidden");
-    return NextResponse.redirect(loginUrl);
+    return withAdminNoStore(NextResponse.redirect(loginUrl));
   }
 
   return response;

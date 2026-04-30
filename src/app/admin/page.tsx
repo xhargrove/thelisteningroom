@@ -16,6 +16,33 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+function AdminDeployHint() {
+  const sha = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
+  const env = process.env.VERCEL_ENV;
+  if (!sha) {
+    return (
+      <p className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-zinc-400">
+        <span className="font-medium text-zinc-200">Local dev.</span> Production shows a 7-character{" "}
+        <strong className="text-zinc-100">build id</strong> here so you can confirm Vercel matches Git (
+        <code className="text-zinc-300">git rev-parse --short HEAD</code>).
+      </p>
+    );
+  }
+  return (
+    <p className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-zinc-400">
+      <span className="font-medium text-zinc-200">Deployed build {sha}</span>
+      {env ? (
+        <>
+          {" "}
+          <span className="text-zinc-500">({env})</span>
+        </>
+      ) : null}
+      . If the admin tables look read-only, compare this id to your latest GitHub commit; redeploy from
+      Vercel if it is behind.
+    </p>
+  );
+}
+
 export default async function AdminPage() {
   const supabase = await createSupabaseServerClient();
   const {
@@ -66,6 +93,12 @@ export default async function AdminPage() {
       <div className="mt-8 space-y-6">
         <DashboardStats stats={dashboard.stats} />
         <DashboardNav />
+        <p className="text-sm leading-relaxed text-zinc-400">
+          Manager tables are wide: scroll horizontally (trackpad swipe or shift + mouse wheel) to reach
+          every column, including <span className="text-zinc-200">Save</span>. Editable cells use light
+          (zinc) input fields.
+        </p>
+        <AdminDeployHint />
       </div>
 
       <DashboardTables data={dashboard} muxUploadEnabled={muxUploadEnabled} />
