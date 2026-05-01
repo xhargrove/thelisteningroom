@@ -8,6 +8,7 @@ import {
 } from "@/lib/admin/require-admin";
 import { getEventFlyerBucketId } from "@/lib/storage/event-flyer-bucket";
 import { getPhotoPostBucketId } from "@/lib/storage/photo-post-bucket";
+import { DIRECT_IMAGE_URL_REQUIREMENT } from "@/lib/photos/media-urls";
 import { friendlySupabaseError } from "@/lib/supabase/friendly-error";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert, TableUpdate } from "@/types/database";
@@ -61,9 +62,7 @@ function requireDirectImageUrl(value: string): string {
   const parsed = new URL(url);
   const pathname = parsed.pathname.toLowerCase();
   if (!/\.(jpg|jpeg|png|webp|gif|avif)$/i.test(pathname)) {
-    throw new Error(
-      "Photo URL must be a direct image file (.jpg, .png, .webp, .gif, .avif). Shared album/page links will not render.",
-    );
+    throw new Error(DIRECT_IMAGE_URL_REQUIREMENT);
   }
   return parsed.toString();
 }

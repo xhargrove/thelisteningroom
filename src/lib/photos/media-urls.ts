@@ -1,5 +1,9 @@
 import type { Json } from "@/types/database";
 
+/** Same text used by server validation (`requireDirectImageUrl`) and admin UI hints. */
+export const DIRECT_IMAGE_URL_REQUIREMENT =
+  "Photo URL must be a direct image file (.jpg, .png, .webp, .gif, .avif). Shared album/page links will not render.";
+
 export function coercePhotoUrls(value: Json): string[] {
   if (!Array.isArray(value)) return [];
   return value

@@ -2,7 +2,11 @@
 
 import { updatePhotoPost } from "@/app/actions/admin-dashboard";
 import { DeletePhotoButton } from "@/components/admin/delete-photo-button";
-import { coercePhotoUrls, urlsToTextarea } from "@/lib/photos/media-urls";
+import {
+  coercePhotoUrls,
+  DIRECT_IMAGE_URL_REQUIREMENT,
+  urlsToTextarea,
+} from "@/lib/photos/media-urls";
 import type { TableRow } from "@/types/database";
 import { useState, useTransition } from "react";
 
@@ -52,7 +56,11 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           disabled={isPending}
           onChange={(event) => setMediaUrls(event.target.value)}
           className="ui-input w-full min-w-[18rem] px-2 py-1.5 text-sm"
+          aria-describedby={`photo-urls-hint-${post.id}`}
         />
+        <p id={`photo-urls-hint-${post.id}`} className="mt-1 max-w-[22rem] text-[11px] leading-snug text-zinc-500">
+          {DIRECT_IMAGE_URL_REQUIREMENT}
+        </p>
       </td>
       <td className="py-3 pr-3 align-top">
         <label className="inline-flex items-center gap-2 text-sm text-zinc-300">
