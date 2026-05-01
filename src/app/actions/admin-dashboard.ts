@@ -8,7 +8,6 @@ import {
 } from "@/lib/admin/require-admin";
 import { getEventFlyerBucketId } from "@/lib/storage/event-flyer-bucket";
 import { getPhotoPostBucketId } from "@/lib/storage/photo-post-bucket";
-import { DIRECT_IMAGE_URL_REQUIREMENT } from "@/lib/photos/media-urls";
 import { friendlySupabaseError } from "@/lib/supabase/friendly-error";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert, TableUpdate } from "@/types/database";
@@ -52,19 +51,10 @@ function parsePhotoUrlList(value: FormDataEntryValue | null): string[] {
   for (const raw of value.split(/\r?\n|,/g)) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
-    unique.add(requireDirectImageUrl(trimmed));
+    /** Any valid http(s) URL — same as before strict extension checks. `/photos` only embeds direct image URLs; others show “Open link”. */
+    unique.add(requireUrl(trimmed, "Photo URL"));
   }
   return Array.from(unique);
-}
-
-function requireDirectImageUrl(value: string): string {
-  const url = requireUrl(value, "Photo URL");
-  const parsed = new URL(url);
-  const pathname = parsed.pathname.toLowerCase();
-  if (!/\.(jpg|jpeg|png|webp|gif|avif)$/i.test(pathname)) {
-    throw new Error(DIRECT_IMAGE_URL_REQUIREMENT);
-  }
-  return parsed.toString();
 }
 
 const EVENT_FLYER_MAX_BYTES = 10 * 1024 * 1024;

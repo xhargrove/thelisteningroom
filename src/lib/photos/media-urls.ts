@@ -1,8 +1,12 @@
 import type { Json } from "@/types/database";
 
-/** Same text used by server validation (`requireDirectImageUrl`) and admin UI hints. */
+/** Admin guidance; media_urls accepts any valid URL (legacy album links keep working). */
 export const DIRECT_IMAGE_URL_REQUIREMENT =
-  "Photo URL must be a direct image file (.jpg, .png, .webp, .gif, .avif). Shared album/page links will not render.";
+  "Inline thumbnails on /photos need direct image URLs (.jpg, .png, .webp, .gif, .avif). Share or album links still save—the post shows “Open link” instead of a carousel.";
+
+/** Extra context for Google Photos-style URLs. */
+export const PHOTO_GALLERY_LINK_EXPLAINER =
+  "Album links (e.g. photos.app.goo.gl) are saved as links. To show images inside the gallery tile, upload files here or paste URLs that point straight at an image file.";
 
 export function coercePhotoUrls(value: Json): string[] {
   if (!Array.isArray(value)) return [];

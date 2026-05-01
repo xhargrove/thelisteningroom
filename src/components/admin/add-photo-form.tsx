@@ -2,7 +2,7 @@
 
 import { createPhotoPost } from "@/app/actions/admin-dashboard";
 import { requestPhotoUploadSlot } from "@/app/actions/admin-dashboard";
-import { DIRECT_IMAGE_URL_REQUIREMENT } from "@/lib/photos/media-urls";
+import { DIRECT_IMAGE_URL_REQUIREMENT, PHOTO_GALLERY_LINK_EXPLAINER } from "@/lib/photos/media-urls";
 import { uploadPhotoToSignedUrl } from "@/lib/photos/photo-upload";
 import { useState, useTransition } from "react";
 
@@ -118,7 +118,9 @@ export function AddPhotoForm() {
             placeholder={"https://cdn.example.com/photo.jpg\nhttps://..."}
             className="ui-input font-mono px-3 py-2 text-sm"
           />
-          <span className="text-xs leading-snug text-zinc-500">{DIRECT_IMAGE_URL_REQUIREMENT}</span>
+          <span className="text-xs leading-snug text-zinc-500">
+            {DIRECT_IMAGE_URL_REQUIREMENT} {PHOTO_GALLERY_LINK_EXPLAINER}
+          </span>
         </label>
         <label className="flex flex-col gap-1.5 sm:col-span-2">
           <span className="text-xs text-zinc-400">Or upload photos (JPG/PNG/WebP/GIF/AVIF)</span>

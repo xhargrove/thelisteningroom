@@ -5,6 +5,7 @@ import { DeletePhotoButton } from "@/components/admin/delete-photo-button";
 import {
   coercePhotoUrls,
   DIRECT_IMAGE_URL_REQUIREMENT,
+  PHOTO_GALLERY_LINK_EXPLAINER,
   urlsToTextarea,
 } from "@/lib/photos/media-urls";
 import type { TableRow } from "@/types/database";
@@ -59,7 +60,7 @@ export function PhotoEditorRow({ post }: { post: PhotoPost }) {
           aria-describedby={`photo-urls-hint-${post.id}`}
         />
         <p id={`photo-urls-hint-${post.id}`} className="mt-1 max-w-[22rem] text-[11px] leading-snug text-zinc-500">
-          {DIRECT_IMAGE_URL_REQUIREMENT}
+          {DIRECT_IMAGE_URL_REQUIREMENT} {PHOTO_GALLERY_LINK_EXPLAINER}
         </p>
       </td>
       <td className="py-3 pr-3 align-top">

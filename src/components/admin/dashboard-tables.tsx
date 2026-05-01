@@ -138,7 +138,7 @@ export function DashboardTables({
       <SectionCard
         id="photos"
         title="Photo manager"
-        description="Existing posts are editable in the table—change fields and click Save. Add new posts with the form above. Photo URLs must end in .jpg, .png, .webp, .gif, or .avif (direct file links only—not album or gallery pages)."
+        description="Existing posts are editable in the table—change fields and click Save. Add new posts with the form above. You can save album/share URLs; inline thumbnails require direct image links or file upload."
       >
         <div className="space-y-5">
           <AddPhotoForm />
