@@ -3,7 +3,14 @@ import Link from "next/link";
 import { EmailSignupForm } from "@/components/email-signup-form";
 import { formatEventDate } from "@/lib/events/format-event-date";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { detectVideoPlatform, getYouTubeEmbedUrl, watchButtonLabel } from "@/lib/videos/platform";
+import { LazyVideoIframe, YOUTUBE_EMBED_ALLOW } from "@/components/videos/lazy-video-iframe";
+import {
+  detectVideoPlatform,
+  getYouTubeEmbedUrl,
+  getYouTubePosterUrl,
+  getYouTubeVideoId,
+  watchButtonLabel,
+} from "@/lib/videos/platform";
 
 /** Refresh homepage periodically so featured mixes stay in sync after admin changes. */
 export const revalidate = 60;
@@ -296,20 +303,21 @@ export default async function HomePage() {
                 const platform = detectVideoPlatform(video.video_url);
                 const youtubeEmbedUrl =
                   platform === "youtube" ? getYouTubeEmbedUrl(video.video_url) : null;
+                const ytId =
+                  platform === "youtube" ? getYouTubeVideoId(video.video_url) : null;
+                const youtubePoster =
+                  ytId && !video.thumbnail_url?.trim() ? getYouTubePosterUrl(ytId) : null;
                 return (
                   <li key={video.id}>
                     <article className="panel-subtle flex h-full flex-col p-5">
                       {platform === "youtube" && youtubeEmbedUrl ? (
                         <div className="mb-4 overflow-hidden rounded-lg border border-white/10 bg-black/30">
-                          <div className="aspect-video">
-                            <iframe
-                              src={youtubeEmbedUrl}
-                              title={video.title}
-                              className="h-full w-full border-0 bg-black"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                              allowFullScreen
-                            />
-                          </div>
+                          <LazyVideoIframe
+                            embedSrc={youtubeEmbedUrl}
+                            title={video.title}
+                            posterUrl={video.thumbnail_url?.trim() || youtubePoster}
+                            allow={YOUTUBE_EMBED_ALLOW}
+                          />
                         </div>
                       ) : video.thumbnail_url?.trim() ? (
                         <div className="mb-4 overflow-hidden rounded-lg border border-white/10 bg-black/30">

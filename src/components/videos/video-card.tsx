@@ -3,9 +3,16 @@
 import {
   detectVideoPlatform,
   getYouTubeEmbedUrl,
+  getYouTubePosterUrl,
+  getYouTubeVideoId,
   watchButtonLabel,
   type VideoPlatform,
 } from "@/lib/videos/platform";
+import {
+  LazyVideoIframe,
+  MUX_EMBED_ALLOW,
+  YOUTUBE_EMBED_ALLOW,
+} from "@/components/videos/lazy-video-iframe";
 import { formatGalleryDate } from "@/lib/dates/format-gallery-date";
 import type { TableRow } from "@/types/database";
 
@@ -31,6 +38,9 @@ function platformShortLabel(platform: VideoPlatform): string {
 export function VideoCard({ video, index = 0 }: { video: Video; index?: number }) {
   const platform = detectVideoPlatform(video.video_url);
   const youtubeEmbedUrl = platform === "youtube" ? getYouTubeEmbedUrl(video.video_url) : null;
+  const youtubeId = platform === "youtube" ? getYouTubeVideoId(video.video_url) : null;
+  const youtubePoster =
+    youtubeId && !video.thumbnail_url?.trim() ? getYouTubePosterUrl(youtubeId) : null;
   const watchLabel = watchButtonLabel(platform);
   const posted = formatGalleryDate(video.created_at);
   const category = video.category?.trim();
@@ -40,19 +50,18 @@ export function VideoCard({ video, index = 0 }: { video: Video; index?: number }
     <article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-night-card/90 to-night-elevated/50 transition-all hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/10">
       <div className="relative aspect-video overflow-hidden bg-black">
         {platform === "youtube" && youtubeEmbedUrl ? (
-          <iframe
-            src={youtubeEmbedUrl}
+          <LazyVideoIframe
+            embedSrc={youtubeEmbedUrl}
             title={video.title}
-            className="h-full w-full border-0 bg-black"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
+            posterUrl={video.thumbnail_url?.trim() || youtubePoster}
+            allow={YOUTUBE_EMBED_ALLOW}
           />
         ) : platform === "mux" ? (
-          <iframe
-            src={video.video_url}
+          <LazyVideoIframe
+            embedSrc={video.video_url}
             title={video.title}
-            className="h-full w-full border-0 bg-black"
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+            posterUrl={video.thumbnail_url?.trim()}
+            allow={MUX_EMBED_ALLOW}
           />
         ) : platform === "hosted" ? (
           <video

@@ -8,6 +8,7 @@ import {
 } from "@/lib/admin/require-admin";
 import { getEventFlyerBucketId } from "@/lib/storage/event-flyer-bucket";
 import { getPhotoPostBucketId } from "@/lib/storage/photo-post-bucket";
+import { friendlySupabaseError } from "@/lib/supabase/friendly-error";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert, TableUpdate } from "@/types/database";
 
@@ -130,7 +131,7 @@ export async function requestEventFlyerUploadSlot(formData: FormData) {
     if (error || !data) {
       return {
         ok: false as const,
-        message: error?.message ?? "Could not start flyer upload.",
+        message: friendlySupabaseError(error?.message, "Could not start flyer upload."),
       };
     }
 
@@ -149,7 +150,10 @@ export async function requestEventFlyerUploadSlot(formData: FormData) {
   } catch (error) {
     return {
       ok: false as const,
-      message: error instanceof Error ? error.message : "Could not upload flyer.",
+      message:
+        error instanceof Error
+          ? friendlySupabaseError(error.message, "Could not upload flyer.")
+          : "Could not upload flyer.",
     };
   }
 }
@@ -184,7 +188,7 @@ export async function requestPhotoUploadSlot(formData: FormData) {
     if (error || !data) {
       return {
         ok: false as const,
-        message: error?.message ?? "Could not start photo upload.",
+        message: friendlySupabaseError(error?.message, "Could not start photo upload."),
       };
     }
 
@@ -203,7 +207,10 @@ export async function requestPhotoUploadSlot(formData: FormData) {
   } catch (error) {
     return {
       ok: false as const,
-      message: error instanceof Error ? error.message : "Could not upload photo.",
+      message:
+        error instanceof Error
+          ? friendlySupabaseError(error.message, "Could not upload photo.")
+          : "Could not upload photo.",
     };
   }
 }

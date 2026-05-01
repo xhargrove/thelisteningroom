@@ -85,3 +85,20 @@ export function getYouTubeEmbedUrl(inputUrl: string): string | null {
     return null;
   }
 }
+
+/** Video id for poster URLs and lazy embeds; null if not a parseable YouTube link. */
+export function getYouTubeVideoId(inputUrl: string): string | null {
+  const embed = getYouTubeEmbedUrl(inputUrl);
+  if (!embed) return null;
+  try {
+    const last = new URL(embed).pathname.split("/").filter(Boolean).pop();
+    return last && /^[a-zA-Z0-9_-]{6,}$/.test(last) ? last : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Static thumbnail served by YouTube (works without API keys). */
+export function getYouTubePosterUrl(videoId: string): string {
+  return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+}

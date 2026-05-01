@@ -6,6 +6,7 @@ import {
   requireAdminServiceRoleClient,
 } from "@/lib/admin/require-admin";
 import { getVideoUploadBucketId } from "@/lib/storage/video-upload-bucket";
+import { friendlySupabaseError } from "@/lib/supabase/friendly-error";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/service";
 import type { TableInsert } from "@/types/database";
 import { VIDEO_UPLOAD_MAX_BYTES, videoUploadMaxLabel } from "@/lib/videos/upload-limits";
@@ -70,9 +71,10 @@ export async function requestVideoUploadSlot(formData: FormData) {
     if (error || !data) {
       return {
         ok: false as const,
-        message:
-          error?.message ??
+        message: friendlySupabaseError(
+          error?.message,
           "Could not start upload. Create the Storage bucket (see supabase/migrations) and set SUPABASE_SERVICE_ROLE_KEY.",
+        ),
       };
     }
 
@@ -86,7 +88,8 @@ export async function requestVideoUploadSlot(formData: FormData) {
   } catch (e) {
     return {
       ok: false as const,
-      message: e instanceof Error ? e.message : "Unauthorized.",
+      message:
+        e instanceof Error ? friendlySupabaseError(e.message, "Unauthorized.") : "Unauthorized.",
     };
   }
 }
@@ -129,7 +132,10 @@ export async function registerUploadedVideo(formData: FormData) {
 
     const { error } = await supabase.from("videos").insert(row);
     if (error) {
-      return { ok: false as const, message: error.message };
+      return {
+        ok: false as const,
+        message: friendlySupabaseError(error.message, "Could not save video."),
+      };
     }
 
     revalidatePath("/admin");
@@ -139,7 +145,10 @@ export async function registerUploadedVideo(formData: FormData) {
   } catch (e) {
     return {
       ok: false as const,
-      message: e instanceof Error ? e.message : "Could not save video.",
+      message:
+        e instanceof Error
+          ? friendlySupabaseError(e.message, "Could not save video.")
+          : "Could not save video.",
     };
   }
 }
