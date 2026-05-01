@@ -89,6 +89,7 @@ export interface Database {
           description: string | null;
           rsvp_link: string | null;
           flyer_image_url: string | null;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -99,6 +100,7 @@ export interface Database {
           description?: string | null;
           rsvp_link?: string | null;
           flyer_image_url?: string | null;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -109,6 +111,7 @@ export interface Database {
           description?: string | null;
           rsvp_link?: string | null;
           flyer_image_url?: string | null;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [];

@@ -71,6 +71,7 @@ export default async function HomePage() {
         .from("events")
         .select("id, title, event_date, location, description, rsvp_link, flyer_image_url")
         .gte("event_date", nowIso)
+        .order("sort_order", { ascending: true })
         .order("event_date", { ascending: true })
         .limit(1),
     ]);

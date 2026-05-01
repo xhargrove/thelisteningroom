@@ -73,6 +73,7 @@ export async function loadAdminDashboard(
       .from("events")
       .select("*")
       .gte("event_date", nowIso)
+      .order("sort_order", { ascending: true })
       .order("event_date", { ascending: true })
       .limit(150),
   ]);

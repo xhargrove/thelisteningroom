@@ -65,13 +65,18 @@ export default async function EventsPage() {
   const [upcomingRes, pastRes] = await Promise.all([
     supabase
       .from("events")
-      .select("id, title, event_date, location, description, rsvp_link, flyer_image_url, created_at")
+      .select(
+        "id, title, event_date, location, description, rsvp_link, flyer_image_url, sort_order, created_at",
+      )
       .gte("event_date", nowIso)
+      .order("sort_order", { ascending: true })
       .order("event_date", { ascending: true })
       .limit(20),
     supabase
       .from("events")
-      .select("id, title, event_date, location, description, rsvp_link, flyer_image_url, created_at")
+      .select(
+        "id, title, event_date, location, description, rsvp_link, flyer_image_url, sort_order, created_at",
+      )
       .lt("event_date", nowIso)
       .order("event_date", { ascending: false })
       .limit(9),

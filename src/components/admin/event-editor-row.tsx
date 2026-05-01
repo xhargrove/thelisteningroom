@@ -1,6 +1,10 @@
 "use client";
 
-import { requestEventFlyerUploadSlot, updateEvent } from "@/app/actions/admin-dashboard";
+import {
+  reorderUpcomingEvent,
+  requestEventFlyerUploadSlot,
+  updateEvent,
+} from "@/app/actions/admin-dashboard";
 import { DeleteEventButton } from "@/components/admin/delete-event-button";
 import { uploadEventFlyerToSignedUrl } from "@/lib/events/flyer-upload";
 import type { TableRow } from "@/types/database";
@@ -18,7 +22,15 @@ function toDateTimeLocalInput(iso: string): string {
   return local.toISOString().slice(0, 16);
 }
 
-export function EventEditorRow({ event }: { event: EventRow }) {
+export function EventEditorRow({
+  event,
+  orderIndex,
+  orderTotal,
+}: {
+  event: EventRow;
+  orderIndex: number;
+  orderTotal: number;
+}) {
   const [isPending, startTransition] = useTransition();
   const [title, setTitle] = useState(event.title);
   const [eventDate, setEventDate] = useState(toDateTimeLocalInput(event.event_date));
@@ -29,9 +41,60 @@ export function EventEditorRow({ event }: { event: EventRow }) {
   const [flyerFile, setFlyerFile] = useState<File | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const [reorderError, setReorderError] = useState<string | null>(null);
+  const canMoveUp = orderIndex > 0;
+  const canMoveDown = orderIndex < orderTotal - 1;
 
   return (
     <tr className="text-zinc-300">
+      <td className="py-3 pr-2 align-top">
+        <div className="flex flex-col gap-1.5">
+          <div className="flex gap-1">
+            <button
+              type="button"
+              disabled={isPending || !canMoveUp}
+              onClick={() => {
+                setReorderError(null);
+                startTransition(async () => {
+                  const r = await reorderUpcomingEvent(event.id, "up");
+                  if (!r.ok) {
+                    setReorderError(r.message);
+                  }
+                });
+              }}
+              className="ui-btn-ghost rounded-md px-2 py-1 text-sm leading-none disabled:opacity-40"
+              aria-label="Show this event earlier on the public events page"
+              title="Earlier on /events"
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              disabled={isPending || !canMoveDown}
+              onClick={() => {
+                setReorderError(null);
+                startTransition(async () => {
+                  const r = await reorderUpcomingEvent(event.id, "down");
+                  if (!r.ok) {
+                    setReorderError(r.message);
+                  }
+                });
+              }}
+              className="ui-btn-ghost rounded-md px-2 py-1 text-sm leading-none disabled:opacity-40"
+              aria-label="Show this event later on the public events page"
+              title="Later on /events"
+            >
+              ↓
+            </button>
+          </div>
+          {orderIndex === 0 ? (
+            <span className="text-[10px] font-medium uppercase leading-tight tracking-wide text-accent">
+              Featured slot
+            </span>
+          ) : null}
+          {reorderError ? <span className="text-[10px] text-red-300">{reorderError}</span> : null}
+        </div>
+      </td>
       <td className="py-3 pr-3 align-top">
         <input
           value={eventDate}

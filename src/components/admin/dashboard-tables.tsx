@@ -167,14 +167,15 @@ export function DashboardTables({
       <SectionCard
         id="events"
         title="Event manager"
-        description="Add, edit, and remove events. Public /events updates from the database."
+        description="Add, edit, and remove events. Use ↑ / ↓ under Public order so the first upcoming row matches who you want featured on /events (not always earliest date)."
       >
         <div className="space-y-5">
           <AddEventForm />
           <TableShell empty={events.length === 0}>
-            <table className="min-w-[1360px] w-full text-left text-sm">
+            <table className="min-w-[1420px] w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-zinc-400">
+                  <th className="w-[6.5rem] pb-3 pr-3 font-medium">Public order</th>
                   <th className="pb-3 pr-3 font-medium">When</th>
                   <th className="pb-3 pr-3 font-medium">Title</th>
                   <th className="pb-3 pr-3 font-medium">Location</th>
@@ -185,8 +186,13 @@ export function DashboardTables({
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
-                {events.map((row) => (
-                  <EventEditorRow key={row.id} event={row} />
+                {events.map((row, index) => (
+                  <EventEditorRow
+                    key={row.id}
+                    event={row}
+                    orderIndex={index}
+                    orderTotal={events.length}
+                  />
                 ))}
               </tbody>
             </table>

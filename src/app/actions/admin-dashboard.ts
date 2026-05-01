@@ -688,6 +688,64 @@ export async function updateEvent(formData: FormData) {
   }
 }
 
+/** Swap position in the public upcoming list (first row = featured on /events). */
+export async function reorderUpcomingEvent(
+  eventId: string,
+  direction: "up" | "down",
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  try {
+    const supabase = await requireAdminServiceRoleClient();
+    const nowIso = new Date().toISOString();
+
+    const { data: rows, error: fetchError } = await supabase
+      .from("events")
+      .select("id")
+      .gte("event_date", nowIso)
+      .order("sort_order", { ascending: true })
+      .order("event_date", { ascending: true });
+
+    if (fetchError) {
+      return { ok: false, message: friendlySupabaseError(fetchError.message, "Could not load events.") };
+    }
+    if (!rows?.length) {
+      return { ok: false, message: "No upcoming events." };
+    }
+
+    const index = rows.findIndex((r) => r.id === eventId);
+    if (index === -1) {
+      return { ok: false, message: "That event is not in the upcoming list." };
+    }
+
+    const swapWith = direction === "up" ? index - 1 : index + 1;
+    if (swapWith < 0 || swapWith >= rows.length) {
+      return { ok: true };
+    }
+
+    const ordered = [...rows];
+    [ordered[index], ordered[swapWith]] = [ordered[swapWith], ordered[index]];
+
+    for (let i = 0; i < ordered.length; i++) {
+      const { error } = await supabase
+        .from("events")
+        .update({ sort_order: i * 10 })
+        .eq("id", ordered[i].id);
+      if (error) {
+        return { ok: false, message: friendlySupabaseError(error.message, "Could not save order.") };
+      }
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/events");
+    revalidatePath("/");
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : "Could not reorder events.",
+    };
+  }
+}
+
 export async function deleteEvent(eventId: string) {
   const supabase = await requireAdminServiceRoleClient();
   const { error } = await supabase.from("events").delete().eq("id", eventId);
